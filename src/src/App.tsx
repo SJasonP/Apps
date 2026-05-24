@@ -1,0 +1,482 @@
+import './App.css'
+import type { ReactNode } from 'react'
+
+type AppStatus = 'available' | 'beta' | 'coming-soon' | 'archived'
+
+type DownloadLink = {
+  label: string
+  url?: string
+  kind: 'app-store' | 'website'
+}
+
+type Feature = {
+  title: string
+  description: string
+}
+
+type PrivacyItem = {
+  title: string
+  description: string
+}
+
+type AppRecord = {
+  slug: string
+  name: string
+  shortDescription: string
+  longDescription: string
+  platforms: string[]
+  status: AppStatus
+  version: string
+  systemRequirements: string[]
+  icon: string
+  downloadLinks: DownloadLink[]
+  features: Feature[]
+  supportEmail: string
+  privacy: PrivacyItem[]
+}
+
+const apps: AppRecord[] = [
+  {
+    slug: 'history-lib',
+    name: 'History Lib',
+    shortDescription: 'Collect, browse, search, deduplicate, and export browser history records.',
+    longDescription:
+      'History Lib is a SwiftUI app for working with browser history records, with support for Safari exports, HistoryLib archives, search, summaries, deduplication, and optional iCloud sync.',
+    platforms: ['macOS', 'iOS'],
+    status: 'available',
+    version: '1.0',
+    systemRequirements: ['macOS 26 or later', 'iOS 26 or later'],
+    icon: '/apps/history-lib/icon.png',
+    downloadLinks: [
+      {
+        label: 'App Store link pending',
+        kind: 'app-store',
+      },
+    ],
+    features: [
+      {
+        title: 'Import history archives',
+        description:
+          'Import Safari history JSON files, folders, ZIP archives, and native HistoryLib .hlz archives.',
+      },
+      {
+        title: 'Browse and search',
+        description:
+          'Browse records by year, month, and day, then search by URL or page title when you need a specific visit.',
+      },
+      {
+        title: 'Summarize and deduplicate',
+        description:
+          'Generate summary snapshots, identify repeated records, and clean up imported or synced datasets.',
+      },
+      {
+        title: 'Export portable data',
+        description:
+          'Export Safari-compatible ZIP files or optimized HistoryLib .hlz archives for backup and transfer.',
+      },
+    ],
+    supportEmail: 'support@sjasonp.net',
+    privacy: [
+      {
+        title: 'Browser history is sensitive',
+        description:
+          'Imported records can include URLs, titles, visit timestamps, source browser names, redirect metadata, and import timestamps.',
+      },
+      {
+        title: 'Local and iCloud storage',
+        description:
+          "When iCloud sync is disabled, data stays in the local SwiftData store. When iCloud sync is enabled, records can sync through the user's iCloud account.",
+      },
+      {
+        title: 'Favicon requests',
+        description:
+          'When site icons are enabled, History Lib may request favicon resources for hosts found in imported history records.',
+      },
+      {
+        title: 'Exports are not encrypted',
+        description:
+          'Exported Safari ZIP files and HistoryLib .hlz archives contain browser history records and should be treated as private data.',
+      },
+    ],
+  },
+]
+
+const statusLabels: Record<AppStatus, string> = {
+  available: 'Available',
+  beta: 'Beta',
+  'coming-soon': 'Coming soon',
+  archived: 'Archived',
+}
+
+function getPathname(): string {
+  return window.location.pathname.replace(/\/+$/, '') || '/'
+}
+
+function getAppBySlug(slug: string): AppRecord | undefined {
+  return apps.find((app) => app.slug === slug)
+}
+
+function App() {
+  const pathname = getPathname()
+  const [firstSegment, secondSegment] = pathname.split('/').filter(Boolean)
+  const selectedApp = firstSegment ? getAppBySlug(firstSegment) : undefined
+
+  let page: ReactNode
+
+  if (pathname === '/') {
+    page = <HomePage />
+  } else if (pathname === '/support') {
+    page = <GlobalSupportPage />
+  } else if (selectedApp && !secondSegment) {
+    page = <AppPage app={selectedApp} />
+  } else if (selectedApp && secondSegment === 'support') {
+    page = <SupportPage app={selectedApp} />
+  } else if (selectedApp && secondSegment === 'privacy') {
+    page = <PrivacyPage app={selectedApp} />
+  } else {
+    page = <NotFoundPage />
+  }
+
+  return (
+    <div className="app-shell">
+      <Header />
+      <main>{page}</main>
+      <Footer />
+    </div>
+  )
+}
+
+function Header() {
+  return (
+    <header className="site-header">
+      <a className="brand-link" href="/" aria-label="SJasonP Apps home">
+        <span className="brand-mark">S</span>
+        <span>SJasonP Apps</span>
+      </a>
+      <nav aria-label="Primary navigation">
+        <a href="/">Apps</a>
+        <a href="/support">Support</a>
+      </nav>
+    </header>
+  )
+}
+
+function HomePage() {
+  return (
+    <>
+      <section className="home-hero">
+        <div className="home-copy">
+          <h1>Apps by SJasonP</h1>
+          <p>
+            A focused home for app introductions, download links, support information, and privacy
+            policies.
+          </p>
+        </div>
+        <div className="home-summary" aria-label="Site summary">
+          <span>{apps.length}</span>
+          <p>Published app</p>
+        </div>
+      </section>
+
+      <section className="app-index" aria-labelledby="apps-heading">
+        <div className="section-heading">
+          <h2 id="apps-heading">Available Apps</h2>
+          <p>Official product pages and support resources.</p>
+        </div>
+        <div className="app-list">
+          {apps.map((app) => (
+            <AppCard key={app.slug} app={app} />
+          ))}
+        </div>
+      </section>
+    </>
+  )
+}
+
+function AppCard({ app }: { app: AppRecord }) {
+  return (
+    <article className="app-card">
+      <img src={app.icon} alt="" className="app-icon" width="88" height="88" />
+      <div className="app-card-body">
+        <div className="app-card-title-row">
+          <h3>{app.name}</h3>
+          <span>{statusLabels[app.status]}</span>
+        </div>
+        <p>{app.shortDescription}</p>
+        <MetaList items={[app.platforms.join(' / '), `Version ${app.version}`]} />
+        <div className="action-row">
+          <a className="button primary" href={`/${app.slug}`}>
+            View app
+          </a>
+          <a className="button secondary" href={`/${app.slug}/support`}>
+            Support
+          </a>
+        </div>
+      </div>
+    </article>
+  )
+}
+
+function AppPage({ app }: { app: AppRecord }) {
+  return (
+    <>
+      <section className="product-hero">
+        <div className="product-copy">
+          <img src={app.icon} alt="" className="product-icon" width="112" height="112" />
+          <h1>{app.name}</h1>
+          <p>{app.longDescription}</p>
+          <MetaList items={[app.platforms.join(' / '), statusLabels[app.status], `Version ${app.version}`]} />
+          <div className="action-row">
+            <DownloadButton link={app.downloadLinks[0]} />
+            <a className="button secondary" href={`/${app.slug}/support`}>
+              Get support
+            </a>
+          </div>
+        </div>
+        <ProductPreview app={app} />
+      </section>
+
+      <section className="content-section" aria-labelledby="features-heading">
+        <div className="section-heading">
+          <h2 id="features-heading">Core Features</h2>
+          <p>Built for careful handling of browser history data.</p>
+        </div>
+        <div className="feature-grid">
+          {app.features.map((feature) => (
+            <article className="feature-card" key={feature.title}>
+              <h3>{feature.title}</h3>
+              <p>{feature.description}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="split-section">
+        <InfoPanel title="System Requirements" items={app.systemRequirements} />
+        <InfoPanel
+          title="Resources"
+          items={[
+            `Support: /${app.slug}/support`,
+            `Privacy Policy: /${app.slug}/privacy`,
+          ]}
+        />
+      </section>
+    </>
+  )
+}
+
+function ProductPreview({ app }: { app: AppRecord }) {
+  return (
+    <aside className="product-preview" aria-label={`${app.name} product preview`}>
+      <div className="preview-toolbar">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <div className="preview-body">
+        <div>
+          <strong>History Records</strong>
+          <span>Year / Month / Day</span>
+        </div>
+        <ul>
+          <li>
+            <span>Import</span>
+            <strong>Safari JSON, ZIP, .hlz</strong>
+          </li>
+          <li>
+            <span>Search</span>
+            <strong>URL and title</strong>
+          </li>
+          <li>
+            <span>Export</span>
+            <strong>Portable archives</strong>
+          </li>
+        </ul>
+      </div>
+    </aside>
+  )
+}
+
+function SupportPage({ app }: { app: AppRecord }) {
+  return (
+    <ArticlePage
+      title={`${app.name} Support`}
+      intro="Find support information, common troubleshooting notes, and product resources."
+    >
+      <section>
+        <h2>Contact</h2>
+        <p>
+          For support, email <a href={`mailto:${app.supportEmail}`}>{app.supportEmail}</a> and
+          include the app name, platform, app version, system version, and a short description of the
+          issue.
+        </p>
+      </section>
+      <section>
+        <h2>Common Questions</h2>
+        <FaqList
+          items={[
+            {
+              question: 'Where is my imported history stored?',
+              answer:
+                'History Lib stores imported records in SwiftData. Depending on your iCloud setting, records may stay local or sync through your iCloud account.',
+            },
+            {
+              question: 'Are exported archives encrypted?',
+              answer:
+                'No. Safari ZIP exports and HistoryLib .hlz archives can contain private browser history records and should be handled carefully.',
+            },
+            {
+              question: 'Why can favicon fetching make network requests?',
+              answer:
+                'When site icons are enabled, the app may request favicon resources for hosts found in imported history records.',
+            },
+          ]}
+        />
+      </section>
+      <section>
+        <h2>Related Links</h2>
+        <p>
+          Return to <a href={`/${app.slug}`}>{app.name}</a> or read the{' '}
+          <a href={`/${app.slug}/privacy`}>privacy policy</a>.
+        </p>
+      </section>
+    </ArticlePage>
+  )
+}
+
+function PrivacyPage({ app }: { app: AppRecord }) {
+  return (
+    <ArticlePage
+      title={`${app.name} Privacy Policy`}
+      intro="This page summarizes how History Lib handles browser history data and related metadata."
+    >
+      {app.privacy.map((item) => (
+        <section key={item.title}>
+          <h2>{item.title}</h2>
+          <p>{item.description}</p>
+        </section>
+      ))}
+      <section>
+        <h2>Support</h2>
+        <p>
+          For privacy questions, email <a href={`mailto:${app.supportEmail}`}>{app.supportEmail}</a>.
+        </p>
+      </section>
+    </ArticlePage>
+  )
+}
+
+function GlobalSupportPage() {
+  return (
+    <ArticlePage
+      title="Support"
+      intro="Choose an app to view product-specific support information."
+    >
+      <div className="resource-list">
+        {apps.map((app) => (
+          <a key={app.slug} href={`/${app.slug}/support`}>
+            <img src={app.icon} alt="" width="44" height="44" />
+            <span>{app.name}</span>
+          </a>
+        ))}
+      </div>
+    </ArticlePage>
+  )
+}
+
+function NotFoundPage() {
+  return (
+    <ArticlePage title="Page Not Found" intro="The requested page does not exist.">
+      <p>
+        Go back to <a href="/">SJasonP Apps</a>.
+      </p>
+    </ArticlePage>
+  )
+}
+
+function ArticlePage({
+  title,
+  intro,
+  children,
+}: {
+  title: string
+  intro: string
+  children: ReactNode
+}) {
+  return (
+    <article className="article-page">
+      <header>
+        <h1>{title}</h1>
+        <p>{intro}</p>
+      </header>
+      <div className="article-content">{children}</div>
+    </article>
+  )
+}
+
+function DownloadButton({ link }: { link?: DownloadLink }) {
+  if (!link?.url) {
+    return (
+      <span className="button disabled" aria-disabled="true">
+        {link?.label ?? 'Download link pending'}
+      </span>
+    )
+  }
+
+  return (
+    <a className="button primary" href={link.url}>
+      {link.label}
+    </a>
+  )
+}
+
+function MetaList({ items }: { items: string[] }) {
+  return (
+    <ul className="meta-list">
+      {items.map((item) => (
+        <li key={item}>{item}</li>
+      ))}
+    </ul>
+  )
+}
+
+function InfoPanel({ title, items }: { title: string; items: string[] }) {
+  return (
+    <section className="info-panel">
+      <h2>{title}</h2>
+      <ul>
+        {items.map((item) => (
+          <li key={item}>{item}</li>
+        ))}
+      </ul>
+    </section>
+  )
+}
+
+function FaqList({ items }: { items: { question: string; answer: string }[] }) {
+  return (
+    <div className="faq-list">
+      {items.map((item) => (
+        <details key={item.question}>
+          <summary>{item.question}</summary>
+          <p>{item.answer}</p>
+        </details>
+      ))}
+    </div>
+  )
+}
+
+function Footer() {
+  return (
+    <footer className="site-footer">
+      <span>SJasonP Apps</span>
+      <nav aria-label="Footer navigation">
+        <a href="/">Apps</a>
+        <a href="/support">Support</a>
+        <a href="/history-lib/privacy">Privacy</a>
+      </nav>
+    </footer>
+  )
+}
+
+export default App

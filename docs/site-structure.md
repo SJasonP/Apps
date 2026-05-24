@@ -6,6 +6,7 @@ First-version routes:
 
 ```text
 /
+/support
 /history-lib
 /history-lib/support
 /history-lib/privacy
@@ -17,14 +18,13 @@ Optional future route:
 /history-lib/faq
 ```
 
-Potential global routes:
+Deferred global route:
 
 ```text
-/support
 /privacy
 ```
 
-Global support and privacy pages may exist later, but App Store metadata should prefer app-specific URLs.
+Global support exists as an app support index. Global privacy may exist later, but App Store metadata should prefer app-specific privacy URLs.
 
 ## Home Page
 
@@ -77,9 +77,9 @@ It should explain:
 - Whether third-party services or SDKs are used
 - How users can request support or deletion if applicable
 
-## Open Questions
+## Decisions
 
-- Whether to add global `/support` and `/privacy` pages in the first version
-- Whether FAQ should be separate or part of each support page
-- How much version and changelog information should appear on app pages
-
+- Add `/support` in the first version as an app support index.
+- Do not add a global `/privacy` page in the first version.
+- Keep FAQ content inside each app support page until an app has enough FAQ content to justify a separate route.
+- Show version information on app pages. Changelog content can be added later when the release history is ready.

@@ -1,0 +1,16 @@
+{
+  "name": "apps-server",
+  "version": "1.0",
+  "author": "SJasonP <SJasonP@iCloud.com>",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "start": "node dist/index.js",
+    "dev": "APP_SERVER_USE_HTTP=1 node --watch dist/index.js"
+  },
+  "devDependencies": {
+    "@types/node": "^24.12.3",
+    "typescript": "~6.0.2"
+  }
+}

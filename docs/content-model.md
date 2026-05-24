@@ -20,8 +20,10 @@ type AppRecord = {
   supportPath: string
   privacyPath: string
   faqPath?: string
+  supportEmail: string
   systemRequirements?: string[]
   features: Feature[]
+  privacy: PrivacyItem[]
 }
 ```
 
@@ -80,6 +82,17 @@ type Feature = {
 }
 ```
 
+## Privacy Item
+
+Suggested privacy item fields:
+
+```ts
+type PrivacyItem = {
+  title: string
+  description: string
+}
+```
+
 ## Initial History Lib Record
 
 History Lib should be the first app record.
@@ -90,18 +103,18 @@ Known fields:
 slug: history-lib
 name: History Lib
 status: available
+version: 1.0
+platforms: macOS, iOS
+system requirements: macOS 26 or later, iOS 26 or later
 canonical page: /history-lib
 support page: /history-lib/support
 privacy page: /history-lib/privacy
+support email: support@sjasonp.net
 ```
 
 Unknown fields to fill later:
 
-- Final short description
 - App Store URL
-- App icon asset
 - Screenshots
-- Minimum macOS version
-- Privacy policy details
-- Support contact method
 
+The first implementation uses the real History Lib app icon from the HistoryLib project and leaves the App Store link disabled until the exact URL is confirmed.
