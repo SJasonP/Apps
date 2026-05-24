@@ -1,344 +1,102 @@
+import { useEffect } from 'react'
 import './App.css'
 import type { ReactNode } from 'react'
-
-type AppStatus = 'available' | 'beta' | 'coming-soon' | 'archived'
-
-type DownloadLink = {
-  label: string
-  url?: string
-  kind: 'app-store' | 'website'
-}
-
-type Feature = {
-  title: string
-  description: string
-}
-
-type PrivacyItem = {
-  title: string
-  description: string
-}
-
-type PreviewItem = {
-  label: string
-  value: string
-}
-
-type FaqItem = {
-  question: string
-  answer: string
-}
-
-type AppRecord = {
-  slug: string
-  name: string
-  shortDescription: string
-  longDescription: string
-  platforms: string[]
-  status: AppStatus
-  version: string
-  systemRequirements: string[]
-  icon: string
-  downloadLinks: DownloadLink[]
-  featuresIntro: string
-  features: Feature[]
-  previewTitle: string
-  previewSubtitle: string
-  previewItems: PreviewItem[]
-  supportFaq: FaqItem[]
-  supportEmail: string
-  privacy: PrivacyItem[]
-}
-
-const apps: AppRecord[] = [
-  {
-    slug: 'history-lib',
-    name: 'History Lib',
-    shortDescription: 'Collect, browse, search, deduplicate, and export browser history records.',
-    longDescription:
-      'History Lib is a SwiftUI app for working with browser history records, with support for Safari exports, HistoryLib archives, search, summaries, deduplication, and optional iCloud sync.',
-    platforms: ['macOS', 'iOS'],
-    status: 'available',
-    version: '1.0',
-    systemRequirements: ['macOS 26 or later', 'iOS 26 or later'],
-    icon: '/apps/history-lib/icon.png',
-    downloadLinks: [
-      {
-        label: 'View on the App Store',
-        url: 'https://apps.apple.com/app/history-lib/id6761198319',
-        kind: 'app-store',
-      },
-    ],
-    featuresIntro: 'Built for careful handling of browser history data.',
-    features: [
-      {
-        title: 'Import history archives',
-        description:
-          'Import Safari history JSON files, folders, ZIP archives, and native HistoryLib .hlz archives.',
-      },
-      {
-        title: 'Browse and search',
-        description:
-          'Browse records by year, month, and day, then search by URL or page title when you need a specific visit.',
-      },
-      {
-        title: 'Summarize and deduplicate',
-        description:
-          'Generate summary snapshots, identify repeated records, and clean up imported or synced datasets.',
-      },
-      {
-        title: 'Export portable data',
-        description:
-          'Export Safari-compatible ZIP files or optimized HistoryLib .hlz archives for backup and transfer.',
-      },
-    ],
-    previewTitle: 'History Records',
-    previewSubtitle: 'Year / Month / Day',
-    previewItems: [
-      {
-        label: 'Import',
-        value: 'Safari JSON, ZIP, .hlz',
-      },
-      {
-        label: 'Search',
-        value: 'URL and title',
-      },
-      {
-        label: 'Export',
-        value: 'Portable archives',
-      },
-    ],
-    supportFaq: [
-      {
-        question: 'Where is my imported history stored?',
-        answer:
-          'History Lib stores imported records in SwiftData. Depending on your iCloud setting, records may stay local or sync through your iCloud account.',
-      },
-      {
-        question: 'Are exported archives encrypted?',
-        answer:
-          'No. Safari ZIP exports and HistoryLib .hlz archives can contain private browser history records and should be handled carefully.',
-      },
-      {
-        question: 'Why can favicon fetching make network requests?',
-        answer:
-          'When site icons are enabled, the app may request favicon resources for hosts found in imported history records.',
-      },
-    ],
-    supportEmail: 'support@sjasonp.net',
-    privacy: [
-      {
-        title: 'Browser history is sensitive',
-        description:
-          'Imported records can include URLs, titles, visit timestamps, source browser names, redirect metadata, and import timestamps.',
-      },
-      {
-        title: 'Local and iCloud storage',
-        description:
-          "When iCloud sync is disabled, data stays in the local SwiftData store. When iCloud sync is enabled, records can sync through the user's iCloud account.",
-      },
-      {
-        title: 'Favicon requests',
-        description:
-          'When site icons are enabled, History Lib may request favicon resources for hosts found in imported history records.',
-      },
-      {
-        title: 'Exports are not encrypted',
-        description:
-          'Exported Safari ZIP files and HistoryLib .hlz archives contain browser history records and should be treated as private data.',
-      },
-    ],
-  },
-  {
-    slug: 'folders-guard',
-    name: 'Folders Guard',
-    shortDescription:
-      'Protect folders while keeping encrypted content practical to move, verify, and share.',
-    longDescription:
-      'Folders Guard is an experimental desktop and CLI tool for folder protection. It keeps encrypted content as a normal folder tree with UUID names, while real names, metadata, and restore keys live separately in encrypted FoldersGuard databases.',
-    platforms: ['macOS', 'Windows', 'Linux', 'CLI'],
-    status: 'available',
-    version: '1.0.0',
-    systemRequirements: [
-      'macOS, Windows, or Linux release build',
-      'SQLCipher-capable build for real encrypted database support',
-      'Independent backups and test data strongly recommended',
-    ],
-    icon: '/apps/folders-guard/icon.png',
-    downloadLinks: [
-      {
-        label: 'GitHub Releases',
-        url: 'https://github.com/SJasonP/FoldersGuard/releases',
-        kind: 'website',
-      },
-    ],
-    featuresIntro: 'Built for manual encrypted-content workflows.',
-    features: [
-      {
-        title: 'Portable encrypted trees',
-        description:
-          'Encrypted output remains a normal folder tree that can be copied, uploaded, downloaded, backed up, or shared with ordinary tools.',
-      },
-      {
-        title: 'Share scoped access',
-        description:
-          '.fgs share databases include only the metadata and keys required for the selected files and folders.',
-      },
-      {
-        title: 'Verify before restore',
-        description:
-          'Check encrypted content integrity without decrypting it, and detect missing or tampered encrypted objects before restore or sharing.',
-      },
-      {
-        title: 'Desktop and CLI workflows',
-        description:
-          'Use the Wails desktop WebUI for interactive workflows or the fg CLI for automation and repeatable operations.',
-      },
-    ],
-    previewTitle: 'Protected Content',
-    previewSubtitle: '.fg / .fgs workflow',
-    previewItems: [
-      {
-        label: 'Encrypt',
-        value: 'UUID folder tree',
-      },
-      {
-        label: 'Verify',
-        value: 'Missing or tampered objects',
-      },
-      {
-        label: 'Share',
-        value: 'Scoped restore database',
-      },
-    ],
-    supportFaq: [
-      {
-        question: 'Is Folders Guard audited security software?',
-        answer:
-          'No. It is experimental AI-written software and should not be treated as audited cryptographic software.',
-      },
-      {
-        question: 'Can I move the encrypted content with ordinary tools?',
-        answer:
-          'Yes. The encrypted output is designed to remain a normal folder tree that can be copied, uploaded, downloaded, backed up, or shared.',
-      },
-      {
-        question: 'What is a share database?',
-        answer:
-          'A .fgs share database contains only the metadata and keys needed to restore the selected files or folders.',
-      },
-    ],
-    supportEmail: 'support@sjasonp.net',
-    privacy: [
-      {
-        title: 'Experimental security software',
-        description:
-          'Folders Guard is AI-written experimental software. It makes no guarantee of security, cryptographic correctness, data durability, production fitness, or protection against data loss.',
-      },
-      {
-        title: 'Encrypted metadata databases',
-        description:
-          'Project and share metadata are stored in SQLCipher-backed .fg and .fgs databases. These databases hold real names, metadata, and keys needed to restore protected content.',
-      },
-      {
-        title: 'Visible encrypted content',
-        description:
-          'Encrypted content remains visible as a folder tree with UUID names. The existence of Folders Guard data, directory hierarchy, item counts, approximate sizes, and modification patterns are not hidden.',
-      },
-      {
-        title: 'Use backups and test copies',
-        description:
-          'Do not use Folders Guard as the only protection for valuable, sensitive, or irreplaceable data. Test release artifacts with copies and keep independent backups.',
-      },
-    ],
-  },
-]
-
-const statusLabels: Record<AppStatus, string> = {
-  available: 'Available',
-  beta: 'Beta',
-  'coming-soon': 'Coming soon',
-  archived: 'Archived',
-}
+import { appContent, statusLabels } from './appContent'
+import type { AppRecord, DownloadLink, FaqItem } from './appContent'
+import { getPreferredLocale, uiText } from './i18n'
 
 function getPathname(): string {
   return window.location.pathname.replace(/\/+$/, '') || '/'
 }
 
-function getAppBySlug(slug: string): AppRecord | undefined {
+function getAppBySlug(apps: AppRecord[], slug: string): AppRecord | undefined {
   return apps.find((app) => app.slug === slug)
 }
 
 function App() {
+  const locale = getPreferredLocale()
+  const text = uiText[locale]
+  const apps = appContent[locale]
+  const labels = statusLabels[locale]
   const pathname = getPathname()
   const [firstSegment, secondSegment] = pathname.split('/').filter(Boolean)
-  const selectedApp = firstSegment ? getAppBySlug(firstSegment) : undefined
+  const selectedApp = firstSegment ? getAppBySlug(apps, firstSegment) : undefined
+
+  useEffect(() => {
+    document.documentElement.lang = locale
+    document.title = text.siteTitle
+  }, [locale, text.siteTitle])
 
   let page: ReactNode
 
   if (pathname === '/') {
-    page = <HomePage />
+    page = <HomePage apps={apps} text={text} labels={labels} />
   } else if (pathname === '/support') {
-    page = <GlobalSupportPage />
+    page = <GlobalSupportPage apps={apps} text={text} />
   } else if (selectedApp && !secondSegment) {
-    page = <AppPage app={selectedApp} />
+    page = <AppPage app={selectedApp} text={text} statusLabel={labels[selectedApp.status]} />
   } else if (selectedApp && secondSegment === 'support') {
-    page = <SupportPage app={selectedApp} />
+    page = <SupportPage app={selectedApp} text={text} />
   } else if (selectedApp && secondSegment === 'privacy') {
-    page = <PrivacyPage app={selectedApp} />
+    page = <PrivacyPage app={selectedApp} text={text} />
   } else {
-    page = <NotFoundPage />
+    page = <NotFoundPage text={text} />
   }
 
   return (
     <div className="app-shell">
-      <Header />
+      <Header text={text} />
       <main>{page}</main>
-      <Footer />
+      <Footer text={text} />
     </div>
   )
 }
 
-function Header() {
+function Header({ text }: { text: typeof uiText['en-US'] }) {
   return (
     <header className="site-header">
-      <a className="brand-link" href="/" aria-label="SJasonP Apps home">
+      <a className="brand-link" href="/" aria-label={text.siteBrand}>
         <span className="brand-mark">S</span>
-        <span>SJasonP Apps</span>
+        <span>{text.siteBrand}</span>
       </a>
-      <nav aria-label="Primary navigation">
-        <a href="/">Apps</a>
-        <a href="/support">Support</a>
+      <nav aria-label={text.primaryNavigation}>
+        <a href="/">{text.navApps}</a>
+        <a href="/support">{text.navSupport}</a>
       </nav>
     </header>
   )
 }
 
-function HomePage() {
+function HomePage({
+  apps,
+  text,
+  labels,
+}: {
+  apps: AppRecord[]
+  text: typeof uiText['en-US']
+  labels: Record<AppRecord['status'], string>
+}) {
   return (
     <>
       <section className="home-hero">
         <div className="home-copy">
-          <h1>Apps by SJasonP</h1>
-          <p>
-            A focused home for app introductions, download links, support information, and privacy
-            policies.
-          </p>
+          <h1>{text.homeTitle}</h1>
+          <p>{text.homeDescription}</p>
         </div>
-        <div className="home-summary" aria-label="Site summary">
+        <div className="home-summary" aria-label={text.siteSummary}>
           <span>{apps.length}</span>
-          <p>Published apps</p>
+          <p>{text.publishedApps}</p>
         </div>
       </section>
 
       <section className="app-index" aria-labelledby="apps-heading">
         <div className="section-heading">
-          <h2 id="apps-heading">Available Apps</h2>
-          <p>Official product pages and support resources.</p>
+          <h2 id="apps-heading">{text.availableApps}</h2>
+          <p>{text.officialResources}</p>
         </div>
         <div className="app-list">
           {apps.map((app) => (
-            <AppCard key={app.slug} app={app} />
+            <AppCard key={app.slug} app={app} text={text} statusLabel={labels[app.status]} />
           ))}
         </div>
       </section>
@@ -346,23 +104,31 @@ function HomePage() {
   )
 }
 
-function AppCard({ app }: { app: AppRecord }) {
+function AppCard({
+  app,
+  text,
+  statusLabel,
+}: {
+  app: AppRecord
+  text: typeof uiText['en-US']
+  statusLabel: string
+}) {
   return (
     <article className="app-card">
       <img src={app.icon} alt="" className="app-icon" width="88" height="88" />
       <div className="app-card-body">
         <div className="app-card-title-row">
           <h3>{app.name}</h3>
-          <span>{statusLabels[app.status]}</span>
+          <span>{statusLabel}</span>
         </div>
         <p>{app.shortDescription}</p>
-        <MetaList items={[app.platforms.join(' / '), `Version ${app.version}`]} />
+        <MetaList items={[app.platforms.join(' / '), `${text.versionLabel} ${app.version}`]} />
         <div className="action-row">
           <a className="button primary" href={`/${app.slug}`}>
-            View app
+            {text.viewApp}
           </a>
           <a className="button secondary" href={`/${app.slug}/support`}>
-            Support
+            {text.support}
           </a>
         </div>
       </div>
@@ -370,7 +136,15 @@ function AppCard({ app }: { app: AppRecord }) {
   )
 }
 
-function AppPage({ app }: { app: AppRecord }) {
+function AppPage({
+  app,
+  text,
+  statusLabel,
+}: {
+  app: AppRecord
+  text: typeof uiText['en-US']
+  statusLabel: string
+}) {
   return (
     <>
       <section className="product-hero">
@@ -378,20 +152,22 @@ function AppPage({ app }: { app: AppRecord }) {
           <img src={app.icon} alt="" className="product-icon" width="112" height="112" />
           <h1>{app.name}</h1>
           <p>{app.longDescription}</p>
-          <MetaList items={[app.platforms.join(' / '), statusLabels[app.status], `Version ${app.version}`]} />
+          <MetaList
+            items={[app.platforms.join(' / '), statusLabel, `${text.versionLabel} ${app.version}`]}
+          />
           <div className="action-row">
-            <DownloadButton link={app.downloadLinks[0]} />
+            <DownloadButton link={app.downloadLinks[0]} fallbackLabel={text.appStoreAlt} />
             <a className="button secondary" href={`/${app.slug}/support`}>
-              Get support
+              {text.getSupport}
             </a>
           </div>
         </div>
-        <ProductPreview app={app} />
+        <ProductPreview app={app} text={text} />
       </section>
 
       <section className="content-section" aria-labelledby="features-heading">
         <div className="section-heading">
-          <h2 id="features-heading">Core Features</h2>
+          <h2 id="features-heading">{text.coreFeatures}</h2>
           <p>{app.featuresIntro}</p>
         </div>
         <div className="feature-grid">
@@ -405,12 +181,12 @@ function AppPage({ app }: { app: AppRecord }) {
       </section>
 
       <section className="split-section">
-        <InfoPanel title="System Requirements" items={app.systemRequirements} />
+        <InfoPanel title={text.systemRequirements} items={app.systemRequirements} />
         <InfoPanel
-          title="Resources"
+          title={text.resources}
           items={[
-            `Support: /${app.slug}/support`,
-            `Privacy Policy: /${app.slug}/privacy`,
+            `${text.supportPathLabel}: /${app.slug}/support`,
+            `${text.privacyPathLabel}: /${app.slug}/privacy`,
           ]}
         />
       </section>
@@ -418,9 +194,9 @@ function AppPage({ app }: { app: AppRecord }) {
   )
 }
 
-function ProductPreview({ app }: { app: AppRecord }) {
+function ProductPreview({ app, text }: { app: AppRecord; text: typeof uiText['en-US'] }) {
   return (
-    <aside className="product-preview" aria-label={`${app.name} product preview`}>
+    <aside className="product-preview" aria-label={`${app.name} ${text.productPreview}`}>
       <div className="preview-toolbar">
         <span></span>
         <span></span>
@@ -444,40 +220,36 @@ function ProductPreview({ app }: { app: AppRecord }) {
   )
 }
 
-function SupportPage({ app }: { app: AppRecord }) {
+function SupportPage({ app, text }: { app: AppRecord; text: typeof uiText['en-US'] }) {
   return (
-    <ArticlePage
-      title={`${app.name} Support`}
-      intro="Find support information, common troubleshooting notes, and product resources."
-    >
+    <ArticlePage title={`${app.name} ${text.support}`} intro={text.supportPageIntro}>
       <section>
-        <h2>Contact</h2>
+        <h2>{text.contact}</h2>
         <p>
-          For support, email <a href={`mailto:${app.supportEmail}`}>{app.supportEmail}</a> and
-          include the app name, platform, app version, system version, and a short description of the
-          issue.
+          {text.contactTextBefore} <a href={`mailto:${app.supportEmail}`}>{app.supportEmail}</a>{' '}
+          {text.contactTextAfter}
         </p>
       </section>
       <section>
-        <h2>Common Questions</h2>
+        <h2>{text.commonQuestions}</h2>
         <FaqList items={app.supportFaq} />
       </section>
       <section>
-        <h2>Related Links</h2>
+        <h2>{text.resources}</h2>
         <p>
-          Return to <a href={`/${app.slug}`}>{app.name}</a> or read the{' '}
-          <a href={`/${app.slug}/privacy`}>privacy policy</a>.
+          {text.returnTo} <a href={`/${app.slug}`}>{app.name}</a> {text.orReadThe}{' '}
+          <a href={`/${app.slug}/privacy`}>{text.privacyPolicy}</a>.
         </p>
       </section>
     </ArticlePage>
   )
 }
 
-function PrivacyPage({ app }: { app: AppRecord }) {
+function PrivacyPage({ app, text }: { app: AppRecord; text: typeof uiText['en-US'] }) {
   return (
     <ArticlePage
-      title={`${app.name} Privacy Policy`}
-      intro={`This page summarizes how ${app.name} handles app data and related metadata.`}
+      title={`${app.name} ${text.privacyTitle}`}
+      intro={text.privacyPageIntro}
     >
       {app.privacy.map((item) => (
         <section key={item.title}>
@@ -486,21 +258,18 @@ function PrivacyPage({ app }: { app: AppRecord }) {
         </section>
       ))}
       <section>
-        <h2>Support</h2>
+        <h2>{text.support}</h2>
         <p>
-          For privacy questions, email <a href={`mailto:${app.supportEmail}`}>{app.supportEmail}</a>.
+          {text.privacyQuestions} <a href={`mailto:${app.supportEmail}`}>{app.supportEmail}</a>.
         </p>
       </section>
     </ArticlePage>
   )
 }
 
-function GlobalSupportPage() {
+function GlobalSupportPage({ apps, text }: { apps: AppRecord[]; text: typeof uiText['en-US'] }) {
   return (
-    <ArticlePage
-      title="Support"
-      intro="Choose an app to view product-specific support information."
-    >
+    <ArticlePage title={text.support} intro={text.productSpecificSupport}>
       <div className="resource-list">
         {apps.map((app) => (
           <a key={app.slug} href={`/${app.slug}/support`}>
@@ -513,11 +282,11 @@ function GlobalSupportPage() {
   )
 }
 
-function NotFoundPage() {
+function NotFoundPage({ text }: { text: typeof uiText['en-US'] }) {
   return (
-    <ArticlePage title="Page Not Found" intro="The requested page does not exist.">
+    <ArticlePage title={text.notFoundTitle} intro={text.notFoundIntro}>
       <p>
-        Go back to <a href="/">SJasonP Apps</a>.
+        {text.returnTo} <a href="/">{text.siteBrand}</a>.
       </p>
     </ArticlePage>
   )
@@ -543,11 +312,17 @@ function ArticlePage({
   )
 }
 
-function DownloadButton({ link }: { link?: DownloadLink }) {
+function DownloadButton({
+  link,
+  fallbackLabel,
+}: {
+  link?: DownloadLink
+  fallbackLabel: string
+}) {
   if (!link?.url) {
     return (
       <span className="button disabled" aria-disabled="true">
-        {link?.label ?? 'Download link pending'}
+        {link?.label ?? fallbackLabel}
       </span>
     )
   }
@@ -595,13 +370,13 @@ function FaqList({ items }: { items: FaqItem[] }) {
   )
 }
 
-function Footer() {
+function Footer({ text }: { text: typeof uiText['en-US'] }) {
   return (
     <footer className="site-footer">
-      <span>SJasonP Apps</span>
-      <nav aria-label="Footer navigation">
-        <a href="/">Apps</a>
-        <a href="/support">Support</a>
+      <span>{text.footerLabel}</span>
+      <nav aria-label={text.footerNavigation}>
+        <a href="/">{text.navApps}</a>
+        <a href="/support">{text.navSupport}</a>
       </nav>
     </footer>
   )

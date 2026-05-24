@@ -30,6 +30,7 @@ In scope:
 - App-specific support pages
 - App-specific privacy policy pages
 - Optional app-specific FAQ pages
+- Full `en-US` and `zh-Hans` localization with browser-language detection
 - A deployment setup for `https://apps.sjasonp.net`
 
 Out of scope for the first version:

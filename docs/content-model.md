@@ -4,6 +4,8 @@
 
 Each app should be represented by structured content.
 
+Every user-facing content field must be localized for `en-US` and `zh-Hans`.
+
 Suggested fields:
 
 ```ts
@@ -30,6 +32,8 @@ type AppRecord = {
   privacy: PrivacyItem[]
 }
 ```
+
+Implementation may either store localized app records directly by locale or store localized fields inside each record. The current implementation stores complete records by locale.
 
 ## Platform
 

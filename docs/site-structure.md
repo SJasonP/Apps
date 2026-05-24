@@ -15,6 +15,8 @@ First-version routes:
 /folders-guard/privacy
 ```
 
+Routes are language-neutral. The same route renders `en-US` or `zh-Hans` content based on browser language.
+
 Optional future route:
 
 ```text
