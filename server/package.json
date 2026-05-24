@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "start": "node dist/index.js",
-    "dev": "APP_SERVER_USE_HTTP=1 node --watch dist/index.js"
+    "start": "node dist/main.js",
+    "dev": "APP_SERVER_USE_HTTP=1 node --watch dist/main.js"
   },
   "devDependencies": {
     "@types/node": "^24.12.3",

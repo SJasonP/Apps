@@ -41,17 +41,17 @@ Out of scope for the first version:
 - Blog publishing
 - Analytics-heavy dashboards
 
-## Initial App
+## Initial Apps
 
-The initial app to represent is History Lib.
+The initial apps to represent are History Lib and Folders Guard.
 
-Canonical app URL:
+Canonical app URLs:
 
 ```text
 https://apps.sjasonp.net/history-lib
+https://apps.sjasonp.net/folders-guard
 ```
 
 ## Product Principle
 
 The website should feel like a clear, trustworthy app directory and support center, not a broad company website or a generic marketing template.
-

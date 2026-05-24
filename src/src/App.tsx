@@ -19,6 +19,16 @@ type PrivacyItem = {
   description: string
 }
 
+type PreviewItem = {
+  label: string
+  value: string
+}
+
+type FaqItem = {
+  question: string
+  answer: string
+}
+
 type AppRecord = {
   slug: string
   name: string
@@ -30,7 +40,12 @@ type AppRecord = {
   systemRequirements: string[]
   icon: string
   downloadLinks: DownloadLink[]
+  featuresIntro: string
   features: Feature[]
+  previewTitle: string
+  previewSubtitle: string
+  previewItems: PreviewItem[]
+  supportFaq: FaqItem[]
   supportEmail: string
   privacy: PrivacyItem[]
 }
@@ -49,10 +64,12 @@ const apps: AppRecord[] = [
     icon: '/apps/history-lib/icon.png',
     downloadLinks: [
       {
-        label: 'App Store link pending',
+        label: 'View on the App Store',
+        url: 'https://apps.apple.com/app/history-lib/id6761198319',
         kind: 'app-store',
       },
     ],
+    featuresIntro: 'Built for careful handling of browser history data.',
     features: [
       {
         title: 'Import history archives',
@@ -73,6 +90,39 @@ const apps: AppRecord[] = [
         title: 'Export portable data',
         description:
           'Export Safari-compatible ZIP files or optimized HistoryLib .hlz archives for backup and transfer.',
+      },
+    ],
+    previewTitle: 'History Records',
+    previewSubtitle: 'Year / Month / Day',
+    previewItems: [
+      {
+        label: 'Import',
+        value: 'Safari JSON, ZIP, .hlz',
+      },
+      {
+        label: 'Search',
+        value: 'URL and title',
+      },
+      {
+        label: 'Export',
+        value: 'Portable archives',
+      },
+    ],
+    supportFaq: [
+      {
+        question: 'Where is my imported history stored?',
+        answer:
+          'History Lib stores imported records in SwiftData. Depending on your iCloud setting, records may stay local or sync through your iCloud account.',
+      },
+      {
+        question: 'Are exported archives encrypted?',
+        answer:
+          'No. Safari ZIP exports and HistoryLib .hlz archives can contain private browser history records and should be handled carefully.',
+      },
+      {
+        question: 'Why can favicon fetching make network requests?',
+        answer:
+          'When site icons are enabled, the app may request favicon resources for hosts found in imported history records.',
       },
     ],
     supportEmail: 'support@sjasonp.net',
@@ -96,6 +146,109 @@ const apps: AppRecord[] = [
         title: 'Exports are not encrypted',
         description:
           'Exported Safari ZIP files and HistoryLib .hlz archives contain browser history records and should be treated as private data.',
+      },
+    ],
+  },
+  {
+    slug: 'folders-guard',
+    name: 'Folders Guard',
+    shortDescription:
+      'Protect folders while keeping encrypted content practical to move, verify, and share.',
+    longDescription:
+      'Folders Guard is an experimental desktop and CLI tool for folder protection. It keeps encrypted content as a normal folder tree with UUID names, while real names, metadata, and restore keys live separately in encrypted FoldersGuard databases.',
+    platforms: ['macOS', 'Windows', 'Linux', 'CLI'],
+    status: 'available',
+    version: '1.0.0',
+    systemRequirements: [
+      'macOS, Windows, or Linux release build',
+      'SQLCipher-capable build for real encrypted database support',
+      'Independent backups and test data strongly recommended',
+    ],
+    icon: '/apps/folders-guard/icon.png',
+    downloadLinks: [
+      {
+        label: 'GitHub Releases',
+        url: 'https://github.com/SJasonP/FoldersGuard/releases',
+        kind: 'website',
+      },
+    ],
+    featuresIntro: 'Built for manual encrypted-content workflows.',
+    features: [
+      {
+        title: 'Portable encrypted trees',
+        description:
+          'Encrypted output remains a normal folder tree that can be copied, uploaded, downloaded, backed up, or shared with ordinary tools.',
+      },
+      {
+        title: 'Share scoped access',
+        description:
+          '.fgs share databases include only the metadata and keys required for the selected files and folders.',
+      },
+      {
+        title: 'Verify before restore',
+        description:
+          'Check encrypted content integrity without decrypting it, and detect missing or tampered encrypted objects before restore or sharing.',
+      },
+      {
+        title: 'Desktop and CLI workflows',
+        description:
+          'Use the Wails desktop WebUI for interactive workflows or the fg CLI for automation and repeatable operations.',
+      },
+    ],
+    previewTitle: 'Protected Content',
+    previewSubtitle: '.fg / .fgs workflow',
+    previewItems: [
+      {
+        label: 'Encrypt',
+        value: 'UUID folder tree',
+      },
+      {
+        label: 'Verify',
+        value: 'Missing or tampered objects',
+      },
+      {
+        label: 'Share',
+        value: 'Scoped restore database',
+      },
+    ],
+    supportFaq: [
+      {
+        question: 'Is Folders Guard audited security software?',
+        answer:
+          'No. It is experimental AI-written software and should not be treated as audited cryptographic software.',
+      },
+      {
+        question: 'Can I move the encrypted content with ordinary tools?',
+        answer:
+          'Yes. The encrypted output is designed to remain a normal folder tree that can be copied, uploaded, downloaded, backed up, or shared.',
+      },
+      {
+        question: 'What is a share database?',
+        answer:
+          'A .fgs share database contains only the metadata and keys needed to restore the selected files or folders.',
+      },
+    ],
+    supportEmail: 'support@sjasonp.net',
+    privacy: [
+      {
+        title: 'Experimental security software',
+        description:
+          'Folders Guard is AI-written experimental software. It makes no guarantee of security, cryptographic correctness, data durability, production fitness, or protection against data loss.',
+      },
+      {
+        title: 'Encrypted metadata databases',
+        description:
+          'Project and share metadata are stored in SQLCipher-backed .fg and .fgs databases. These databases hold real names, metadata, and keys needed to restore protected content.',
+      },
+      {
+        title: 'Visible encrypted content',
+        description:
+          'Encrypted content remains visible as a folder tree with UUID names. The existence of Folders Guard data, directory hierarchy, item counts, approximate sizes, and modification patterns are not hidden.',
+      },
+      {
+        title: 'Use backups and test copies',
+        description:
+          'Do not use Folders Guard as the only protection for valuable, sensitive, or irreplaceable data. Test release artifacts with copies and keep independent backups.',
       },
     ],
   },
@@ -174,7 +327,7 @@ function HomePage() {
         </div>
         <div className="home-summary" aria-label="Site summary">
           <span>{apps.length}</span>
-          <p>Published app</p>
+          <p>Published apps</p>
         </div>
       </section>
 
@@ -239,7 +392,7 @@ function AppPage({ app }: { app: AppRecord }) {
       <section className="content-section" aria-labelledby="features-heading">
         <div className="section-heading">
           <h2 id="features-heading">Core Features</h2>
-          <p>Built for careful handling of browser history data.</p>
+          <p>{app.featuresIntro}</p>
         </div>
         <div className="feature-grid">
           {app.features.map((feature) => (
@@ -275,22 +428,16 @@ function ProductPreview({ app }: { app: AppRecord }) {
       </div>
       <div className="preview-body">
         <div>
-          <strong>History Records</strong>
-          <span>Year / Month / Day</span>
+          <strong>{app.previewTitle}</strong>
+          <span>{app.previewSubtitle}</span>
         </div>
         <ul>
-          <li>
-            <span>Import</span>
-            <strong>Safari JSON, ZIP, .hlz</strong>
-          </li>
-          <li>
-            <span>Search</span>
-            <strong>URL and title</strong>
-          </li>
-          <li>
-            <span>Export</span>
-            <strong>Portable archives</strong>
-          </li>
+          {app.previewItems.map((item) => (
+            <li key={item.label}>
+              <span>{item.label}</span>
+              <strong>{item.value}</strong>
+            </li>
+          ))}
         </ul>
       </div>
     </aside>
@@ -313,25 +460,7 @@ function SupportPage({ app }: { app: AppRecord }) {
       </section>
       <section>
         <h2>Common Questions</h2>
-        <FaqList
-          items={[
-            {
-              question: 'Where is my imported history stored?',
-              answer:
-                'History Lib stores imported records in SwiftData. Depending on your iCloud setting, records may stay local or sync through your iCloud account.',
-            },
-            {
-              question: 'Are exported archives encrypted?',
-              answer:
-                'No. Safari ZIP exports and HistoryLib .hlz archives can contain private browser history records and should be handled carefully.',
-            },
-            {
-              question: 'Why can favicon fetching make network requests?',
-              answer:
-                'When site icons are enabled, the app may request favicon resources for hosts found in imported history records.',
-            },
-          ]}
-        />
+        <FaqList items={app.supportFaq} />
       </section>
       <section>
         <h2>Related Links</h2>
@@ -348,7 +477,7 @@ function PrivacyPage({ app }: { app: AppRecord }) {
   return (
     <ArticlePage
       title={`${app.name} Privacy Policy`}
-      intro="This page summarizes how History Lib handles browser history data and related metadata."
+      intro={`This page summarizes how ${app.name} handles app data and related metadata.`}
     >
       {app.privacy.map((item) => (
         <section key={item.title}>
@@ -424,7 +553,7 @@ function DownloadButton({ link }: { link?: DownloadLink }) {
   }
 
   return (
-    <a className="button primary" href={link.url}>
+    <a className="button primary" href={link.url} rel="noreferrer" target="_blank">
       {link.label}
     </a>
   )
@@ -453,7 +582,7 @@ function InfoPanel({ title, items }: { title: string; items: string[] }) {
   )
 }
 
-function FaqList({ items }: { items: { question: string; answer: string }[] }) {
+function FaqList({ items }: { items: FaqItem[] }) {
   return (
     <div className="faq-list">
       {items.map((item) => (
@@ -473,7 +602,6 @@ function Footer() {
       <nav aria-label="Footer navigation">
         <a href="/">Apps</a>
         <a href="/support">Support</a>
-        <a href="/history-lib/privacy">Privacy</a>
       </nav>
     </footer>
   )

@@ -10,6 +10,9 @@ First-version routes:
 /history-lib
 /history-lib/support
 /history-lib/privacy
+/folders-guard
+/folders-guard/support
+/folders-guard/privacy
 ```
 
 Optional future route:

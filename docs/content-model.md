@@ -23,6 +23,10 @@ type AppRecord = {
   supportEmail: string
   systemRequirements?: string[]
   features: Feature[]
+  previewTitle: string
+  previewSubtitle: string
+  previewItems: PreviewItem[]
+  supportFaq: FaqItem[]
   privacy: PrivacyItem[]
 }
 ```
@@ -82,6 +86,28 @@ type Feature = {
 }
 ```
 
+## Preview Item
+
+Suggested preview item fields:
+
+```ts
+type PreviewItem = {
+  label: string
+  value: string
+}
+```
+
+## FAQ Item
+
+Suggested FAQ item fields:
+
+```ts
+type FaqItem = {
+  question: string
+  answer: string
+}
+```
+
 ## Privacy Item
 
 Suggested privacy item fields:
@@ -117,4 +143,31 @@ Unknown fields to fill later:
 - App Store URL
 - Screenshots
 
-The first implementation uses the real History Lib app icon from the HistoryLib project and leaves the App Store link disabled until the exact URL is confirmed.
+The first implementation uses the real History Lib app icon from the HistoryLib project.
+
+The App Store URL is:
+
+```text
+https://apps.apple.com/app/history-lib/id6761198319
+```
+
+## Initial Folders Guard Record
+
+Folders Guard should be represented as a first-version app record.
+
+Known fields:
+
+```text
+slug: folders-guard
+name: Folders Guard
+status: available
+version: 1.0.0
+platforms: macOS, Windows, Linux, CLI
+canonical page: /folders-guard
+support page: /folders-guard/support
+privacy page: /folders-guard/privacy
+support email: support@sjasonp.net
+download page: https://github.com/SJasonP/FoldersGuard/releases
+```
+
+The first implementation uses the real FoldersGuard app icon from the FoldersGuard project.
