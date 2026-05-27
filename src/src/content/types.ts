@@ -15,7 +15,9 @@ export type Feature = {
 
 export type PrivacyItem = {
     title: string
-    description: string
+    description?: string
+    paragraphs?: string[]
+    items?: string[]
 }
 
 export type PreviewItem = {
@@ -26,6 +28,12 @@ export type PreviewItem = {
 export type FaqItem = {
     question: string
     answer: string
+}
+
+export type StorySection = {
+    title: string
+    paragraphs?: string[]
+    items?: string[]
 }
 
 export type AppRecord = {
@@ -47,7 +55,11 @@ export type AppRecord = {
     previewItems: PreviewItem[]
     supportFaq: FaqItem[]
     supportEmail: string
+    privacyIntro?: string
+    privacyMeta?: string[]
     privacy: PrivacyItem[]
+    privacyFooter?: string
+    storySections?: StorySection[]
 }
 
 export type AppSharedRecord = Pick<

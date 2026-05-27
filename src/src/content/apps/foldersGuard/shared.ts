@@ -7,5 +7,5 @@ export const foldersGuardShared: AppSharedRecord = {
     status: 'available',
     version: '1.0.0',
     icon: '/apps/folders-guard/icon.png',
-    supportEmail: 'support@sjasonp.net',
+    supportEmail: 'SJasonP@iCloud.com',
 }

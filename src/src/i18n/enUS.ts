@@ -11,6 +11,9 @@ export const enUS: UiText = {
     coreFeatures: 'Core Features',
     footerLabel: 'SJasonP Apps',
     getSupport: 'Get support',
+    globalContactIntro:
+        'For product support, privacy questions, or encrypted contact, use the contact information below.',
+    gpgFingerprint: 'GPG fingerprint',
     homeDescription:
         'A focused home for App introductions, download links, support information, and privacy policies.',
     homeTitleMain: 'Apps',
@@ -27,6 +30,7 @@ export const enUS: UiText = {
     privacyQuestions: 'For privacy questions, email',
     privacyTitle: 'Privacy Policy',
     productPreview: 'product preview',
+    productStory: 'Background',
     productSpecificSupport: 'Choose an App to view product-specific support information.',
     publishedApps: 'Published Apps',
     siteSummary: 'Site summary',

@@ -169,7 +169,7 @@ system requirements: macOS 26 or later, iOS 26 or later
 canonical page: /history-lib
 support page: /history-lib/support
 privacy page: /history-lib/privacy
-support email: support@sjasonp.net
+support email: SJasonP@iCloud.com
 ```
 
 Unknown fields to fill later:
@@ -200,7 +200,7 @@ platforms: macOS, Windows, Linux, CLI
 canonical page: /folders-guard
 support page: /folders-guard/support
 privacy page: /folders-guard/privacy
-support email: support@sjasonp.net
+support email: SJasonP@iCloud.com
 download page: https://github.com/SJasonP/FoldersGuard/releases
 ```
 

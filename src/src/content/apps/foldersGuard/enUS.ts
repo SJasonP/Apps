@@ -63,6 +63,16 @@ export const foldersGuardEnUS: AppLocalizedContent = {
                 'No. It is experimental AI-written software and should not be treated as audited cryptographic software.',
         },
         {
+            question: 'Does Folders Guard upload my files?',
+            answer:
+                'No. Encryption, decryption, verification, and restore operations are performed locally on your device. Files are not uploaded to a server by the App.',
+        },
+        {
+            question: 'Does Folders Guard collect analytics or crash reports?',
+            answer:
+                'No. The App does not collect names, emails, account information, device identifiers, usage statistics, analytics, crash reports, file contents, file names, or encryption keys.',
+        },
+        {
             question: 'Can I move the encrypted content with ordinary tools?',
             answer:
                 'Yes. The encrypted output is designed to remain a normal folder tree that can be copied, uploaded, downloaded, backed up, or shared.',
@@ -73,26 +83,75 @@ export const foldersGuardEnUS: AppLocalizedContent = {
                 'A .fgs share database contains only the metadata and keys needed to restore the selected files or folders.',
         },
     ],
+    privacyIntro:
+        'Folders Guard is a desktop application for macOS and Windows that allows users to encrypt and manage files locally. Your privacy is our top priority. This Privacy Policy explains how the App handles data and permissions.',
+    privacyMeta: ['Effective Date: May 12, 2026', 'Developer: Jason Pan (@SJasonP)'],
     privacy: [
         {
-            title: 'Experimental security software',
+            title: '1. Overview',
             description:
-                'Folders Guard is AI-written experimental software. It makes no guarantee of security, cryptographic correctness, data durability, production fitness, or protection against data loss.',
+                'Folders Guard ("the App") is a desktop application for macOS and Windows that allows users to encrypt and manage files locally. Your privacy is our top priority. This Privacy Policy explains how the App handles data and permissions.',
         },
         {
-            title: 'Encrypted metadata databases',
-            description:
-                'Project and share metadata are stored in SQLCipher-backed .fg and .fgs databases. These databases hold real names, metadata, and keys needed to restore protected content.',
+            title: '2. No Personal Data Collection',
+            paragraphs: [
+                'Folders Guard does not collect, store, transmit, or share any personal information or files. This includes, but is not limited to:',
+            ],
+            items: [
+                'Names, emails, or account information',
+                'IP addresses or device identifiers',
+                'Usage statistics or analytics',
+                'Crash reports',
+                'File names, folder names, or contents',
+                'Encryption keys',
+                'All operations happen locally on your device.',
+            ],
         },
         {
-            title: 'Visible encrypted content',
+            title: '3. Local-Only File Processing',
             description:
-                'Encrypted content remains visible as a folder tree with UUID names. The existence of Folders Guard data, directory hierarchy, item counts, approximate sizes, and modification patterns are not hidden.',
+                'All encryption and decryption are performed entirely on your device. Files are never uploaded to any server, cloud service, or third-party system. Users retain full control over which files or folders are processed.',
         },
         {
-            title: 'Use backups and test copies',
+            title: '4. Network Access',
+            paragraphs: ['The App may access the internet only to check for software updates. These update checks:'],
+            items: [
+                'Are automatic and silent',
+                'Do not transmit personal or file data',
+                'Do not include analytics or tracking',
+                'The App does not automatically download or install updates; users must manually initiate downloads.',
+            ],
+        },
+        {
+            title: '5. Local Data Storage',
+            paragraphs: ['Folders Guard may store the following on your device only locally:'],
+            items: [
+                'Application settings and preferences',
+                'Recently opened locations',
+                'Encrypted directory metadata necessary for functionality',
+                'No data is transmitted externally.',
+            ],
+        },
+        {
+            title: '6. File Access Permissions',
             description:
-                'Do not use Folders Guard as the only protection for valuable, sensitive, or irreplaceable data. Test release artifacts with copies and keep independent backups.',
+                'The App may request access to files or folders selected by the user. This access is strictly used for encryption and decryption operations and does not extend to other files.',
+        },
+        {
+            title: '7. Third-Party Services',
+            description:
+                'Folders Guard does not use any third-party analytics, advertising, tracking, telemetry, or cloud services. No external SDKs are included for data collection.',
+        },
+        {
+            title: '8. Changes to This Privacy Policy',
+            description:
+                'Any updates will be reflected by modifying the "Last updated" date. Users are encouraged to review this page periodically.',
+        },
+        {
+            title: '9. Contact',
+            description:
+                'If you have any questions regarding this privacy policy or the Folders Guard application, please contact Developer: Jason Pan (@SJasonP), Email: SJasonP@iCloud.com.',
         },
     ],
+    privacyFooter: 'Last Updated on May 12, 2026.',
 }

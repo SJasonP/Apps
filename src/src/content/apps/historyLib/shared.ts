@@ -8,5 +8,5 @@ export const historyLibShared: AppSharedRecord = {
     version: '1.0',
     icon: '/apps/history-lib/icon.png',
     iconDark: '/apps/history-lib/icon-dark.png',
-    supportEmail: 'support@sjasonp.net',
+    supportEmail: 'SJasonP@iCloud.com',
 }

@@ -189,6 +189,31 @@ function AppPage({
                 </div>
             </section>
 
+            {app.storySections?.length ? (
+                <section className="content-section" aria-labelledby="story-heading">
+                    <div className="section-heading">
+                        <h2 id="story-heading">{text.productStory}</h2>
+                    </div>
+                    <div className="story-list">
+                        {app.storySections.map((section) => (
+                            <article className="story-section" key={section.title}>
+                                <h3>{section.title}</h3>
+                                {section.paragraphs?.map((paragraph) => (
+                                    <p key={paragraph}>{paragraph}</p>
+                                ))}
+                                {section.items?.length ? (
+                                    <ul>
+                                        {section.items.map((item) => (
+                                            <li key={item}>{item}</li>
+                                        ))}
+                                    </ul>
+                                ) : null}
+                            </article>
+                        ))}
+                    </div>
+                </section>
+            ) : null}
+
             <section className="split-section">
                 <InfoPanel title={text.systemRequirements} items={app.systemRequirements}/>
                 <InfoPanel
@@ -267,12 +292,23 @@ function PrivacyPage({app, text}: { app: AppRecord; text: typeof uiText['en-US']
     return (
         <ArticlePage
             title={`${app.name} ${text.privacyTitle}`}
-            intro={text.privacyPageIntro}
+            intro={app.privacyIntro ?? text.privacyPageIntro}
         >
+            {app.privacyMeta?.length ? <InfoPanel title={text.resources} items={app.privacyMeta}/> : null}
             {app.privacy.map((item) => (
                 <section key={item.title}>
                     <h2>{item.title}</h2>
-                    <p>{item.description}</p>
+                    {item.description ? <p>{item.description}</p> : null}
+                    {item.paragraphs?.map((paragraph) => (
+                        <p key={paragraph}>{paragraph}</p>
+                    ))}
+                    {item.items?.length ? (
+                        <ul className="article-list">
+                            {item.items.map((listItem) => (
+                                <li key={listItem}>{listItem}</li>
+                            ))}
+                        </ul>
+                    ) : null}
                 </section>
             ))}
             <section>
@@ -281,6 +317,7 @@ function PrivacyPage({app, text}: { app: AppRecord; text: typeof uiText['en-US']
                     {text.privacyQuestions} <a href={`mailto:${app.supportEmail}`}>{app.supportEmail}</a>.
                 </p>
             </section>
+            {app.privacyFooter ? <p className="article-note">{app.privacyFooter}</p> : null}
         </ArticlePage>
     )
 }
@@ -288,6 +325,14 @@ function PrivacyPage({app, text}: { app: AppRecord; text: typeof uiText['en-US']
 function GlobalSupportPage({apps, text}: { apps: AppRecord[]; text: typeof uiText['en-US'] }) {
     return (
         <ArticlePage title={text.support} intro={text.productSpecificSupport}>
+            <section>
+                <h2>{text.contact}</h2>
+                <p>{text.globalContactIntro}</p>
+                <div className="contact-list">
+                    <a href="mailto:SJasonP@iCloud.com">SJasonP@iCloud.com</a>
+                    <code>{text.gpgFingerprint}: 4346 5709 BADE 18AD D1D4 9CF3 9441 0395 F49A E2E0</code>
+                </div>
+            </section>
             <div className="resource-list">
                 {apps.map((app) => (
                     <a key={app.slug} href={`/${app.slug}/support`}>

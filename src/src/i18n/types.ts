@@ -14,6 +14,8 @@ export type UiText = {
     coreFeatures: string
     footerLabel: string
     getSupport: string
+    globalContactIntro: string
+    gpgFingerprint: string
     homeDescription: string
     homeTitleMain: string
     homeTitleMuted: string
@@ -29,6 +31,7 @@ export type UiText = {
     privacyQuestions: string
     privacyTitle: string
     productPreview: string
+    productStory: string
     productSpecificSupport: string
     publishedApps: string
     siteSummary: string
