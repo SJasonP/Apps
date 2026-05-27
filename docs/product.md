@@ -2,7 +2,7 @@
 
 ## Purpose
 
-`apps.sjasonp.net` is the official app hub for apps developed by SJasonP.
+`apps.sjasonp.net` is an app hub for app introductions, downloads, support, and policy pages.
 
 The site provides:
 
@@ -56,3 +56,5 @@ https://apps.sjasonp.net/folders-guard
 ## Product Principle
 
 The website should feel like a clear, trustworthy app directory and support center, not a broad company website or a generic marketing template.
+
+The primary first-viewport title is `SJasonP Apps`. `SJasonP` should be visually muted, with `Apps` carrying the emphasis. The page should not imply that every future app must be authored only by SJasonP.

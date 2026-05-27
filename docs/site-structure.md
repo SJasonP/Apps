@@ -37,7 +37,7 @@ The home page is an app index.
 
 It should show:
 
-- Site identity: SJasonP Apps
+- Site identity: `SJasonP Apps`, with `SJasonP` visually muted and `Apps` emphasized
 - A short description of the app hub
 - A list of apps
 - For each app: icon, name, one-line description, platform, availability, and primary action

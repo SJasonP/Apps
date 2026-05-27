@@ -17,6 +17,7 @@ type AppRecord = {
   platforms: AppPlatform[]
   status: AppStatus
   icon: string
+  iconDark?: string
   screenshots: Screenshot[]
   downloadLinks: DownloadLink[]
   supportPath: string
@@ -34,6 +35,8 @@ type AppRecord = {
 ```
 
 Implementation may either store localized app records directly by locale or store localized fields inside each record. The current implementation stores complete records by locale.
+
+If an App provides separate light and dark icons, store the default light icon in `icon` and the dark-mode icon in `iconDark`. Rendering should follow `prefers-color-scheme` so App icons adapt independently from localized content.
 
 ## Platform
 
