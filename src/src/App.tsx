@@ -1,8 +1,8 @@
 import {useEffect} from 'react'
 import './App.css'
 import type {ReactNode} from 'react'
-import {appContent, statusLabels} from './appContent'
-import type {AppRecord, DownloadLink, FaqItem} from './appContent'
+import {appContent, statusLabels} from './content'
+import type {AppRecord, DownloadLink, FaqItem} from './content'
 import {getPreferredLocale, uiText} from './i18n'
 
 function getPathname(): string {

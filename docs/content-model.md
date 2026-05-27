@@ -34,9 +34,36 @@ type AppRecord = {
 }
 ```
 
-Implementation may either store localized app records directly by locale or store localized fields inside each record. The current implementation stores complete records by locale.
+Implementation stores one directory per App. Shared App metadata lives outside locale files, while user-facing App content is split into one file per supported locale. Each App directory assembles those files into a `LocalizedAppRecord`, and the content index aggregates all Apps into locale-specific lists for rendering.
 
 If an App provides separate light and dark icons, store the default light icon in `icon` and the dark-mode icon in `iconDark`. Rendering should follow `prefers-color-scheme` so App icons adapt independently from localized content.
+
+## Source Layout
+
+App content is split by ownership:
+
+```text
+src/src/content/types.ts
+src/src/content/statusLabels.ts
+src/src/content/apps/historyLib/shared.ts
+src/src/content/apps/historyLib/enUS.ts
+src/src/content/apps/historyLib/zhHans.ts
+src/src/content/apps/historyLib/index.ts
+src/src/content/apps/foldersGuard/shared.ts
+src/src/content/apps/foldersGuard/enUS.ts
+src/src/content/apps/foldersGuard/zhHans.ts
+src/src/content/apps/foldersGuard/index.ts
+src/src/content/apps/index.ts
+src/src/content/index.ts
+```
+
+To add an App:
+
+1. Add a new `src/src/content/apps/{appName}/` directory.
+2. Put shared slug, name, platform, status, version, icon, and support email fields in `shared.ts`.
+3. Put each locale's user-facing App content in `enUS.ts` and `zhHans.ts`.
+4. Assemble the shared and localized records in that App directory's `index.ts`.
+5. Add that assembled record to `src/src/content/apps/index.ts`.
 
 ## Platform
 
