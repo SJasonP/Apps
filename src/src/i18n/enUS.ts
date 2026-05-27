@@ -2,6 +2,8 @@ import type {UiText} from './types'
 
 export const enUS: UiText = {
     appStoreAlt: 'Download link pending',
+    appStore: 'App Store',
+    appStoreUnavailableRegion: 'App Store is currently unavailable in this region.',
     availableApps: 'Available Apps',
     commonQuestions: 'Common Questions',
     contact: 'Contact',
@@ -10,10 +12,15 @@ export const enUS: UiText = {
     contactTextBefore: 'For support, email',
     coreFeatures: 'Core Features',
     footerLabel: 'SJasonP Apps',
+    getAppTitle: 'Get',
+    getNow: 'Get Now',
     getSupport: 'Get support',
+    getPageIntro:
+        'Choose the best available download based on your browser region and device information.',
     globalContactIntro:
         'For product support, privacy questions, or encrypted contact, use the contact information below.',
     gpgFingerprint: 'GPG fingerprint',
+    githubProxyNotice: 'This GitHub download uses gh-proxy.org acceleration.',
     homeDescription:
         'A focused home for App introductions, download links, support information, and privacy policies.',
     homeTitleMain: 'Apps',
@@ -33,6 +40,10 @@ export const enUS: UiText = {
     productStory: 'Background',
     productSpecificSupport: 'Choose an App to view product-specific support information.',
     publishedApps: 'Published Apps',
+    regionLabel: 'Region',
+    regionVerificationRequired: 'App Store acquisition requires IP-based region verification and is unavailable until the region is confirmed.',
+    selectedForDevice: 'Selected for this device',
+    githubReleases: 'GitHub Releases',
     siteSummary: 'Site summary',
     footerNavigation: 'Footer navigation',
     resources: 'Resources',
@@ -44,6 +55,9 @@ export const enUS: UiText = {
     supportPathLabel: 'Support',
     supportPageIntro: 'Find support information, common troubleshooting notes, and product resources.',
     systemRequirements: 'System Requirements',
+    unavailableForDevice: 'No direct release asset is available for this device.',
+    unavailableInRegion: 'Unavailable in your region',
     versionLabel: 'Version',
     viewApp: 'View App',
+    yourDevice: 'Your device',
 }

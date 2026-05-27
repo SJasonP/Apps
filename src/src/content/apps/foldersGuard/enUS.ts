@@ -10,13 +10,6 @@ export const foldersGuardEnUS: AppLocalizedContent = {
         'SQLCipher-capable build for real encrypted database support',
         'Independent backups and test data strongly recommended',
     ],
-    downloadLinks: [
-        {
-            label: 'GitHub Releases',
-            url: 'https://github.com/SJasonP/FoldersGuard/releases',
-            kind: 'website',
-        },
-    ],
     featuresIntro: 'Built for manual encrypted-content workflows.',
     features: [
         {

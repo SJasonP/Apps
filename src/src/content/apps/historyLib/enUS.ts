@@ -5,13 +5,6 @@ export const historyLibEnUS: AppLocalizedContent = {
     longDescription:
         'History Lib is a SwiftUI App for preserving Safari browser history records, with support for imports, HistoryLib archives, search, summaries, deduplication, export, and optional iCloud sync.',
     systemRequirements: ['macOS 26 or later', 'iOS 26 or later'],
-    downloadLinks: [
-        {
-            label: 'View on the App Store',
-            url: 'https://apps.apple.com/app/history-lib/id6761198319',
-            kind: 'app-store',
-        },
-    ],
     featuresIntro: 'Built for careful handling of browser history data.',
     features: [
         {

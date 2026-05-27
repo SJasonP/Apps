@@ -1,0 +1,6 @@
+export {AppPage} from './AppPage'
+export {GetPage} from './GetPage'
+export {HomePage} from './HomePage'
+export {NotFoundPage} from './NotFoundPage'
+export {PrivacyPage} from './PrivacyPage'
+export {GlobalSupportPage, SupportPage} from './SupportPage'

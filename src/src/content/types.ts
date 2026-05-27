@@ -2,11 +2,30 @@ import type {Locale} from '../i18n'
 
 export type AppStatus = 'available' | 'beta' | 'coming-soon' | 'archived'
 
-export type DownloadLink = {
-    label: string
-    url?: string
-    kind: 'app-store' | 'website'
+export type AcquisitionPlatform = 'android' | 'ios' | 'linux' | 'macos' | 'windows'
+
+export type RegionRestriction = 'CN' | 'EU27'
+
+export type AppStoreDownloadLink = {
+    kind: 'app-store'
+    url: string
+    restrictedRegions?: RegionRestriction[]
 }
+
+export type GithubReleaseDownloadLink = {
+    kind: 'github-release'
+    url: string
+    platform: AcquisitionPlatform
+    fileName: string
+}
+
+export type WebsiteDownloadLink = {
+    kind: 'website'
+    url: string
+    platform?: AcquisitionPlatform
+}
+
+export type DownloadLink = AppStoreDownloadLink | GithubReleaseDownloadLink | WebsiteDownloadLink
 
 export type Feature = {
     title: string
@@ -47,6 +66,7 @@ export type AppRecord = {
     systemRequirements: string[]
     icon: string
     iconDark?: string
+    sourceUrl?: string
     downloadLinks: DownloadLink[]
     featuresIntro: string
     features: Feature[]
@@ -64,7 +84,16 @@ export type AppRecord = {
 
 export type AppSharedRecord = Pick<
     AppRecord,
-    'slug' | 'name' | 'platforms' | 'status' | 'version' | 'icon' | 'iconDark' | 'supportEmail'
+    | 'downloadLinks'
+    | 'icon'
+    | 'iconDark'
+    | 'name'
+    | 'platforms'
+    | 'slug'
+    | 'sourceUrl'
+    | 'status'
+    | 'supportEmail'
+    | 'version'
 >
 
 export type AppLocalizedContent = Omit<AppRecord, keyof AppSharedRecord>

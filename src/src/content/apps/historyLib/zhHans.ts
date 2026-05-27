@@ -5,13 +5,6 @@ export const historyLibZhHans: AppLocalizedContent = {
     longDescription:
         'History Lib 是一个用于保留 Safari 浏览器历史记录的 SwiftUI App，支持导入、HistoryLib 归档、搜索、摘要、去重、导出以及可选的 iCloud 同步。',
     systemRequirements: ['macOS 26 或更高版本', 'iOS 26 或更高版本'],
-    downloadLinks: [
-        {
-            label: '在 App Store 查看',
-            url: 'https://apps.apple.com/app/history-lib/id6761198319',
-            kind: 'app-store',
-        },
-    ],
     featuresIntro: '为谨慎处理浏览器历史数据而设计。',
     features: [
         {

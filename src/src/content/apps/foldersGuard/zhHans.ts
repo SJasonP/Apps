@@ -9,13 +9,6 @@ export const foldersGuardZhHans: AppLocalizedContent = {
         '真正可用的加密数据库支持需要包含 SQLCipher 的构建',
         '强烈建议保留独立备份并先使用测试数据',
     ],
-    downloadLinks: [
-        {
-            label: 'GitHub Releases',
-            url: 'https://github.com/SJasonP/FoldersGuard/releases',
-            kind: 'website',
-        },
-    ],
     featuresIntro: '为手动处理加密内容的工作流而设计。',
     features: [
         {

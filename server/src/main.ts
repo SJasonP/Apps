@@ -20,6 +20,43 @@ const distDir = resolve(process.env.APP_STATIC_DIR ?? join(projectDir, 'src', 'd
 const indexHtmlPath = join(distDir, 'index.html')
 
 const textMimeTypes = new Set(['application/json', 'image/svg+xml', 'text/css', 'text/html', 'text/javascript', 'text/plain'])
+const eu27CountryCodes = new Set([
+    'AT',
+    'BE',
+    'BG',
+    'HR',
+    'CY',
+    'CZ',
+    'DK',
+    'EE',
+    'FI',
+    'FR',
+    'DE',
+    'GR',
+    'HU',
+    'IE',
+    'IT',
+    'LV',
+    'LT',
+    'LU',
+    'MT',
+    'NL',
+    'PL',
+    'PT',
+    'RO',
+    'SK',
+    'SI',
+    'ES',
+    'SE',
+])
+
+type RegionRestriction = 'CN' | 'EU27'
+
+type RegionResponse = {
+    countryCode: string | null
+    region: RegionRestriction | null
+    source: string
+}
 
 function getContentType(filePath: string): string {
     const contentType = mime.getType(filePath) ?? 'application/octet-stream'
@@ -53,6 +90,97 @@ function isApiRequest(pathname: string): boolean {
     return pathname === '/api' || pathname.startsWith('/api/')
 }
 
+function normalizeCountryCode(value: string | string[] | undefined): string | null {
+    const rawValue = Array.isArray(value) ? value[0] : value
+
+    if (!rawValue) {
+        return null
+    }
+
+    const countryCode = rawValue.trim().toUpperCase()
+
+    if (/^[A-Z]{2}$/.test(countryCode) && countryCode !== 'XX') {
+        return countryCode
+    }
+
+    return null
+}
+
+function getCountryCodeFromRequest(request: IncomingMessage): { countryCode: string | null; source: string } {
+    const headerCandidates: Array<[string, string | string[] | undefined]> = [
+        ['cf-ipcountry', request.headers['cf-ipcountry']],
+        ['cloudfront-viewer-country', request.headers['cloudfront-viewer-country']],
+        ['x-vercel-ip-country', request.headers['x-vercel-ip-country']],
+        ['x-appengine-country', request.headers['x-appengine-country']],
+        ['x-country-code', request.headers['x-country-code']],
+        ['x-geoip-country', request.headers['x-geoip-country']],
+    ]
+
+    for (const [source, headerValue] of headerCandidates) {
+        const countryCode = normalizeCountryCode(headerValue)
+
+        if (countryCode) {
+            return {countryCode, source}
+        }
+    }
+
+    const envCountryCode = normalizeCountryCode(process.env.APP_GEOIP_COUNTRY)
+
+    if (envCountryCode) {
+        return {countryCode: envCountryCode, source: 'env'}
+    }
+
+    return {countryCode: null, source: 'unknown'}
+}
+
+function regionFromCountryCode(countryCode: string | null): RegionRestriction | null {
+    if (countryCode === 'CN') {
+        return 'CN'
+    }
+
+    if (countryCode && eu27CountryCodes.has(countryCode)) {
+        return 'EU27'
+    }
+
+    return null
+}
+
+function sendJson(response: ServerResponse, statusCode: number, body: unknown): void {
+    const payload = JSON.stringify(body)
+
+    response.writeHead(statusCode, {
+        'Content-Type': 'application/json; charset=utf-8',
+        'Content-Length': Buffer.byteLength(payload),
+        'Cache-Control': 'no-store',
+    })
+    response.end(payload)
+}
+
+function handleApiRequest(request: IncomingMessage, response: ServerResponse, pathname: string): void {
+    if (pathname !== '/api/region') {
+        sendNotFound(response)
+        return
+    }
+
+    if (request.method === 'HEAD') {
+        response.writeHead(200, {
+            'Content-Type': 'application/json; charset=utf-8',
+            'Cache-Control': 'no-store',
+        })
+        response.end()
+        return
+    }
+
+    const {countryCode, source} = getCountryCodeFromRequest(request)
+    const body: RegionResponse = {
+        countryCode,
+        region: regionFromCountryCode(countryCode),
+        source,
+    }
+
+    sendJson(response, 200, body)
+}
+
 function getRequestUrl(request: IncomingMessage): URL | null {
     if (!request.url) {
         return null
@@ -60,7 +188,7 @@ function getRequestUrl(request: IncomingMessage): URL | null {
 
     const host = request.headers.host ?? `localhost:${PORT}`
 
-    return new URL(request.url, `http://${host}`)
+    return new URL(request.url, `https://${host}`)
 }
 
 function redirect(response: ServerResponse, location: string): void {
@@ -166,6 +294,11 @@ function handleRequest(request: IncomingMessage, response: ServerResponse): void
         return
     }
 
+    if (isApiRequest(requestUrl.pathname)) {
+        handleApiRequest(request, response, requestUrl.pathname)
+        return
+    }
+
     const staticPath = resolveStaticPath(requestUrl.pathname)
 
     if (!staticPath) {
@@ -186,11 +319,6 @@ function handleRequest(request: IncomingMessage, response: ServerResponse): void
         }
 
         serveFile(response, staticPath)
-        return
-    }
-
-    if (isApiRequest(requestUrl.pathname)) {
-        sendNotFound(response)
         return
     }
 

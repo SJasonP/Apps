@@ -62,6 +62,32 @@ https://apps.sjasonp.net/assets/index-ABC123.js
 https://apps.sjasonp.net/api/StatusCheck
 ```
 
+## IP Region Detection
+
+The get page uses `/api/region` for legal availability and GitHub acceleration decisions.
+
+The region decision must be based on IP-derived country information only. Browser language, locale, and time zone must not be used for region availability.
+
+The server accepts these country-code sources, in priority order:
+
+```text
+CF-IPCountry
+CloudFront-Viewer-Country
+X-Vercel-IP-Country
+X-Appengine-Country
+X-Country-Code
+X-GeoIP-Country
+APP_GEOIP_COUNTRY
+```
+
+For local testing:
+
+```text
+APP_SERVER_USE_HTTP=1 APP_GEOIP_COUNTRY=CN npm run start
+```
+
+For production, configure the edge/CDN/reverse proxy to provide one of the supported IP-derived country headers. If no country code is provided, `/api/region` returns an unknown region and restricted App Store links remain unavailable.
+
 ## Build
 
 The frontend project uses Vite and lives in:

@@ -4,7 +4,7 @@
 
 Each app should be represented by structured content.
 
-Every user-facing content field must be localized for `en-US` and `zh-Hans`.
+Every user-facing content field must be localized for `en-US` and `zh-Hans`. Distribution metadata, identifiers, URLs, and other locale-independent fields must stay shared so adding a locale does not duplicate product configuration.
 
 Suggested fields:
 
@@ -36,6 +36,8 @@ type AppRecord = {
 
 Implementation stores one directory per App. Shared App metadata lives outside locale files, while user-facing App content is split into one file per supported locale. Each App directory assembles those files into a `LocalizedAppRecord`, and the content index aggregates all Apps into locale-specific lists for rendering.
 
+Shared App metadata includes `slug`, `name`, `platforms`, `status`, `version`, `icon`, `iconDark`, `sourceUrl`, `supportEmail`, and `downloadLinks`. Locale files should not define `downloadLinks`; get-page text is localized by the page UI, while concrete App Store and GitHub Releases targets belong to `shared.ts`.
+
 If an App provides separate light and dark icons, store the default light icon in `icon` and the dark-mode icon in `iconDark`. Rendering should follow `prefers-color-scheme` so App icons adapt independently from localized content.
 
 ## Source Layout
@@ -60,7 +62,7 @@ src/src/content/index.ts
 To add an App:
 
 1. Add a new `src/src/content/apps/{appName}/` directory.
-2. Put shared slug, name, platform, status, version, icon, and support email fields in `shared.ts`.
+2. Put shared slug, name, platform, status, version, icon, source URL, support email, and download links in `shared.ts`.
 3. Put each locale's user-facing App content in `enUS.ts` and `zhHans.ts`.
 4. Assemble the shared and localized records in that App directory's `index.ts`.
 5. Add that assembled record to `src/src/content/apps/index.ts`.
@@ -90,12 +92,34 @@ type AppStatus =
 Suggested download link fields:
 
 ```ts
-type DownloadLink = {
-  label: string
-  url: string
-  kind: 'app-store' | 'github-release' | 'direct-download' | 'website'
-}
+type AcquisitionPlatform = 'android' | 'ios' | 'linux' | 'macos' | 'windows'
+
+type RegionRestriction = 'CN' | 'EU27'
+
+type DownloadLink =
+  | {
+      kind: 'app-store'
+      url: string
+      restrictedRegions?: RegionRestriction[]
+    }
+  | {
+      kind: 'github-release'
+      url: string
+      platform: AcquisitionPlatform
+      fileName: string
+    }
+  | {
+      kind: 'website'
+      url: string
+      platform?: AcquisitionPlatform
+    }
 ```
+
+App Store links should include `restrictedRegions: ['CN', 'EU27']` when the app is not supplied in mainland China or the EU27.
+
+GitHub release links should point to concrete release assets, not only to the release list page, so the get page can select a platform-specific download automatically.
+
+Download links do not include user-facing labels. The get page owns channel names such as `App Store` and `GitHub Releases`; release entries own only concrete distribution metadata such as `platform`, `url`, and `fileName`.
 
 ## Screenshot
 

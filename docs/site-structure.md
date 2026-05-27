@@ -8,9 +8,11 @@ First-version routes:
 /
 /support
 /history-lib
+/history-lib/get
 /history-lib/support
 /history-lib/privacy
 /folders-guard
+/folders-guard/get
 /folders-guard/support
 /folders-guard/privacy
 ```
@@ -52,13 +54,30 @@ Each app page should follow a shared structure:
 - App icon
 - App name
 - One-line positioning statement
-- Primary download action
+- Primary `Get Now` action linking to the app-specific get page
 - Screenshots or product imagery
 - Core features
 - Platform and system requirements
 - Support link
 - Privacy link
 - FAQ summary when useful
+
+## Get Page
+
+Each app get page should choose the best available acquisition path from browser-provided information.
+
+It should:
+
+- Infer device platform from browser platform and user agent information.
+- Determine whether the user appears to be in mainland China or the EU27 only from IP-derived country information provided by the server.
+- Disable App Store links for mainland China and EU27, because current apps are not supplied there.
+- Select the matching GitHub release asset for macOS, Windows, Linux, iOS, or Android when available.
+- Use `gh-proxy.org` for GitHub release downloads when the user appears to be in mainland China.
+- Show a clear unavailable message when no direct asset exists for the detected device.
+
+The frontend must not use browser language, locale, or time zone as a legal availability signal. Production deployments must provide IP-derived country information to `/api/region`, for example through Cloudflare `CF-IPCountry`, CloudFront `CloudFront-Viewer-Country`, Vercel `X-Vercel-IP-Country`, an equivalent reverse-proxy header, or a server-side GeoIP database integration.
+
+Country and region names shown to users should be localized with `Intl.DisplayNames` from the IP-derived country code. User-visible country/region names must not add special labels for internal availability groups.
 
 ## Support Page
 

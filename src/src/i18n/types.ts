@@ -6,6 +6,8 @@ export type LocalizedString = Record<Locale, string>
 
 export type UiText = {
     appStoreAlt: string
+    appStore: string
+    appStoreUnavailableRegion: string
     availableApps: string
     commonQuestions: string
     contact: string
@@ -13,9 +15,13 @@ export type UiText = {
     contactTextBefore: string
     coreFeatures: string
     footerLabel: string
+    getAppTitle: string
+    getNow: string
     getSupport: string
+    getPageIntro: string
     globalContactIntro: string
     gpgFingerprint: string
+    githubProxyNotice: string
     homeDescription: string
     homeTitleMain: string
     homeTitleMuted: string
@@ -34,6 +40,10 @@ export type UiText = {
     productStory: string
     productSpecificSupport: string
     publishedApps: string
+    regionLabel: string
+    regionVerificationRequired: string
+    selectedForDevice: string
+    githubReleases: string
     siteSummary: string
     footerNavigation: string
     resources: string
@@ -45,6 +55,9 @@ export type UiText = {
     supportPathLabel: string
     supportPageIntro: string
     systemRequirements: string
+    unavailableForDevice: string
+    unavailableInRegion: string
     versionLabel: string
     viewApp: string
+    yourDevice: string
 }

@@ -9,4 +9,12 @@ export const appContent: Record<Locale, AppRecord[]> = {
 }
 
 export {statusLabels}
-export type {AppRecord, AppStatus, DownloadLink, FaqItem} from './types'
+export type {
+    AcquisitionPlatform,
+    AppRecord,
+    AppStatus,
+    DownloadLink,
+    FaqItem,
+    GithubReleaseDownloadLink,
+    RegionRestriction,
+} from './types'

@@ -1,0 +1,52 @@
+@media (prefers-color-scheme: dark) {
+    .app-shell {
+        --bg: #0d1117;
+        --surface: #121923;
+        --surface-soft: #182231;
+        --text: #eef3f8;
+        --muted: #a1adbb;
+        --faint: #778495;
+        --border: #263244;
+        --accent: #64a2ff;
+        --accent-strong: #8dbbff;
+        --accent-soft: rgba(100, 162, 255, 0.12);
+        --shadow: 0 24px 60px rgba(0, 0, 0, 0.22);
+        background: linear-gradient(180deg, rgba(24, 34, 49, 0.65), rgba(13, 17, 23, 0) 360px),
+        var(--bg);
+    }
+
+    .home-summary {
+        background: linear-gradient(180deg, #152032, #111a27);
+    }
+
+    .faq-list details {
+        background: #101720;
+    }
+
+    .product-preview {
+        background: #101722;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+    }
+
+    .preview-toolbar {
+        border-bottom-color: rgba(255, 255, 255, 0.08);
+    }
+
+    .preview-toolbar span {
+        background: #d6deeb;
+        opacity: 0.65;
+    }
+
+    .preview-body strong {
+        color: #f8fbff;
+    }
+
+    .preview-body span {
+        color: #8ea2bb;
+    }
+
+    .preview-body li {
+        border-color: rgba(255, 255, 255, 0.08);
+        background: rgba(255, 255, 255, 0.045);
+    }
+}

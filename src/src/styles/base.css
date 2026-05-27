@@ -1,0 +1,245 @@
+.app-shell {
+    --bg: #f7f8fb;
+    --surface: #ffffff;
+    --surface-soft: #eef2f7;
+    --text: #16202b;
+    --muted: #5f6d7c;
+    --faint: #8592a3;
+    --border: #dde4ed;
+    --accent: #1565d8;
+    --accent-strong: #0f4da5;
+    --accent-soft: #e7f0ff;
+    --shadow: 0 24px 60px rgba(40, 55, 76, 0.12);
+    min-height: 100svh;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.78), rgba(247, 248, 251, 0) 360px),
+    var(--bg);
+    color: var(--text);
+}
+
+.site-header,
+.site-footer,
+main {
+    width: min(1120px, calc(100% - 48px));
+    margin-inline: auto;
+}
+
+.site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 76px;
+    gap: 24px;
+}
+
+.brand-link,
+.site-header nav,
+.site-footer nav,
+.action-row,
+.meta-list {
+    display: flex;
+    align-items: center;
+}
+
+.brand-link {
+    gap: 12px;
+    color: var(--text);
+    font-size: 15px;
+    font-weight: 720;
+    text-decoration: none;
+}
+
+.brand-mark {
+    display: block;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(40, 55, 76, 0.08);
+}
+
+.brand-mark img {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.site-header nav,
+.site-footer nav {
+    gap: 6px;
+}
+
+.site-header nav a,
+.site-footer nav a {
+    border-radius: 9px;
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 620;
+    line-height: 1;
+    padding: 10px 12px;
+    text-decoration: none;
+}
+
+.site-header nav a:hover,
+.site-footer nav a:hover {
+    background: var(--surface-soft);
+    color: var(--text);
+}
+
+main {
+    padding: 38px 0 72px;
+}
+
+h1,
+h2,
+h3,
+p {
+    margin: 0;
+}
+
+h1 {
+    color: var(--text);
+    font-size: clamp(42px, 7vw, 84px);
+    font-weight: 760;
+    letter-spacing: 0;
+    line-height: 0.96;
+}
+
+h2 {
+    color: var(--text);
+    font-size: clamp(26px, 4vw, 42px);
+    font-weight: 730;
+    letter-spacing: 0;
+    line-height: 1.05;
+}
+
+h3 {
+    color: var(--text);
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0;
+    line-height: 1.18;
+}
+
+.home-copy p,
+.product-copy p,
+.section-heading p,
+.app-card p,
+.feature-card p,
+.story-section p,
+.article-page header p,
+.article-content p,
+.faq-list p {
+    color: var(--muted);
+    font-size: 18px;
+    line-height: 1.65;
+}
+
+.home-copy p,
+.product-copy p {
+    max-width: 640px;
+    margin-top: 22px;
+    font-size: 20px;
+}
+
+.app-index,
+.content-section,
+.split-section,
+.article-page {
+    margin-top: 72px;
+}
+
+.section-heading {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 24px;
+}
+
+.section-heading p {
+    max-width: 360px;
+}
+
+.action-row {
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 22px;
+}
+
+.button {
+    display: inline-flex;
+    min-height: 42px;
+    align-items: center;
+    justify-content: center;
+    border-radius: 11px;
+    font-size: 14px;
+    font-weight: 720;
+    line-height: 1;
+    padding: 0 16px;
+    text-decoration: none;
+}
+
+.button.primary {
+    background: var(--accent);
+    color: #ffffff;
+}
+
+.button.primary:hover {
+    background: var(--accent-strong);
+}
+
+.button.secondary {
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text);
+}
+
+.button.secondary:hover {
+    background: var(--surface-soft);
+}
+
+.button.disabled {
+    border: 1px solid var(--border);
+    background: var(--surface-soft);
+    color: var(--faint);
+}
+
+.meta-list {
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 16px 0 0;
+    padding: 0;
+    list-style: none;
+}
+
+.meta-list li {
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 640;
+    line-height: 1;
+    padding: 7px 10px;
+}
+
+.app-icon,
+.product-icon,
+.resource-list img {
+    border-radius: 22%;
+    box-shadow: 0 14px 30px rgba(40, 55, 76, 0.14);
+}
+
+.site-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 28px 0 40px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.site-footer > span {
+    font-weight: 720;
+}
