@@ -17,7 +17,9 @@ type AppRecord = {
   platforms: AppPlatform[]
   status: AppStatus
   icon: string
+  iconSmall?: string
   iconDark?: string
+  iconDarkSmall?: string
   screenshots: Screenshot[]
   downloadLinks: DownloadLink[]
   supportPath: string
@@ -36,9 +38,9 @@ type AppRecord = {
 
 Implementation stores one directory per App. Shared App metadata lives outside locale files, while user-facing App content is split into one file per supported locale. Each App directory assembles those files into a `LocalizedAppRecord`, and the content index aggregates all Apps into locale-specific lists for rendering.
 
-Shared App metadata includes `slug`, `name`, `platforms`, `status`, `version`, `icon`, `iconDark`, `sourceUrl`, `supportEmail`, and `downloadLinks`. Locale files should not define `downloadLinks`; get-page text is localized by the page UI, while concrete App Store and GitHub Releases targets belong to `shared.ts`.
+Shared App metadata includes `slug`, `name`, `platforms`, `status`, `version`, `icon`, `iconSmall`, `iconDark`, `iconDarkSmall`, `sourceUrl`, `supportEmail`, and `downloadLinks`. Locale files should not define `downloadLinks`; get-page text is localized by the page UI, while concrete App Store and GitHub Releases targets belong to `shared.ts`.
 
-If an App provides separate light and dark icons, store the default light icon in `icon` and the dark-mode icon in `iconDark`. Rendering should follow `prefers-color-scheme` so App icons adapt independently from localized content.
+If an App provides separate light and dark icons, store the default light icon in `icon` and the dark-mode icon in `iconDark`. App icons should also provide 256px compressed variants through `iconSmall` and `iconDarkSmall` for normal page rendering. Rendering should follow `prefers-color-scheme` so App icons adapt independently from localized content.
 
 ## Source Layout
 
@@ -62,7 +64,7 @@ src/src/content/index.ts
 To add an App:
 
 1. Add a new `src/src/content/apps/{appName}/` directory.
-2. Put shared slug, name, platform, status, version, icon, source URL, support email, and download links in `shared.ts`.
+2. Put shared slug, name, platform, status, version, icon variants, source URL, support email, and download links in `shared.ts`.
 3. Put each locale's user-facing App content in `enUS.ts` and `zhHans.ts`.
 4. Assemble the shared and localized records in that App directory's `index.ts`.
 5. Add that assembled record to `src/src/content/apps/index.ts`.

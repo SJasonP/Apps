@@ -1,4 +1,4 @@
-import {ArticlePage, FaqList} from '../components'
+import {AppIcon, ArticlePage, FaqList} from '../components'
 import type {AppRecord} from '../content'
 import type {UiText} from '../i18n'
 
@@ -41,7 +41,7 @@ export function GlobalSupportPage({apps, text}: { apps: AppRecord[]; text: UiTex
             <div className="resource-list">
                 {apps.map((app) => (
                     <a key={app.slug} href={`/${app.slug}/support`}>
-                        <img src={app.icon} alt="" width="44" height="44"/>
+                        <AppIcon app={app} className="" size={44}/>
                         <span>{app.name}</span>
                     </a>
                 ))}

@@ -6,7 +6,10 @@ export const foldersGuardShared: AppSharedRecord = {
     platforms: ['macOS', 'Windows', 'Linux'],
     status: 'available',
     version: '1.0.0',
-    icon: '/apps/folders-guard/icon.png',
+    icon: '/apps/folders-guard/icon-light.png',
+    iconSmall: '/apps/folders-guard/icon-light-256.png',
+    iconDark: '/apps/folders-guard/icon-dark.png',
+    iconDarkSmall: '/apps/folders-guard/icon-dark-256.png',
     sourceUrl: 'https://github.com/SJasonP/FoldersGuard',
     downloadLinks: [
         {

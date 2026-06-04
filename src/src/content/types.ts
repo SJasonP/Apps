@@ -65,7 +65,9 @@ export type AppRecord = {
     version: string
     systemRequirements: string[]
     icon: string
+    iconSmall?: string
     iconDark?: string
+    iconDarkSmall?: string
     sourceUrl?: string
     downloadLinks: DownloadLink[]
     featuresIntro: string
@@ -86,7 +88,9 @@ export type AppSharedRecord = Pick<
     AppRecord,
     | 'downloadLinks'
     | 'icon'
+    | 'iconSmall'
     | 'iconDark'
+    | 'iconDarkSmall'
     | 'name'
     | 'platforms'
     | 'slug'
