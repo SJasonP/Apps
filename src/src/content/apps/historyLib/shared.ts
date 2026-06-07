@@ -6,8 +6,10 @@ export const historyLibShared: AppSharedRecord = {
     platforms: ['macOS', 'iOS'],
     status: 'available',
     version: '1.0',
-    icon: '/apps/history-lib/icon.png',
+    icon: '/apps/history-lib/icon-light.png',
+    iconSmall: '/apps/history-lib/icon-light-256.png',
     iconDark: '/apps/history-lib/icon-dark.png',
+    iconDarkSmall: '/apps/history-lib/icon-dark-256.png',
     sourceUrl: 'https://github.com/SJasonP/HistoryLib',
     downloadLinks: [
         {
