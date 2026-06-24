@@ -1,34 +1,28 @@
+import {githubReleaseAsset} from '../../releaseAsset'
 import type {AppSharedRecord} from '../../types'
+
+const version = '1.0'
+const sourceUrl = 'https://github.com/SJasonP/HistoryLib'
 
 export const historyLibShared: AppSharedRecord = {
     slug: 'history-lib',
     name: 'History Lib',
     platforms: ['macOS', 'iOS'],
     status: 'available',
-    version: '1.0',
+    version,
     icon: '/apps/history-lib/icon-light.png',
     iconSmall: '/apps/history-lib/icon-light-256.png',
     iconDark: '/apps/history-lib/icon-dark.png',
     iconDarkSmall: '/apps/history-lib/icon-dark-256.png',
-    sourceUrl: 'https://github.com/SJasonP/HistoryLib',
+    sourceUrl,
     downloadLinks: [
         {
             kind: 'app-store',
             url: 'https://apps.apple.com/app/history-lib/id6761198319',
             restrictedRegions: ['CN', 'EU27'],
         },
-        {
-            kind: 'github-release',
-            url: 'https://github.com/SJasonP/HistoryLib/releases/download/v1.0/HistoryLib-v1.0-macOS.zip',
-            platform: 'macos',
-            fileName: 'HistoryLib-v1.0-macOS.zip',
-        },
-        {
-            kind: 'github-release',
-            url: 'https://github.com/SJasonP/HistoryLib/releases/download/v1.0/HistoryLib-v1.0-iOS.ipa',
-            platform: 'ios',
-            fileName: 'HistoryLib-v1.0-iOS.ipa',
-        },
+        githubReleaseAsset(sourceUrl, 'HistoryLib', version, {platform: 'macos', label: 'macOS', ext: 'zip'}),
+        githubReleaseAsset(sourceUrl, 'HistoryLib', version, {platform: 'ios', label: 'iOS', ext: 'ipa'}),
     ],
     supportEmail: 'SJasonP@iCloud.com',
 }

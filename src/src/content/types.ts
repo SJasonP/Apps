@@ -2,6 +2,17 @@ import type {Locale} from '../i18n'
 
 export type AppStatus = 'available' | 'beta' | 'coming-soon' | 'archived'
 
+export type AppPlatform =
+    | 'macOS'
+    | 'iOS'
+    | 'iPadOS'
+    | 'watchOS'
+    | 'visionOS'
+    | 'Windows'
+    | 'Linux'
+    | 'CLI'
+    | 'Web'
+
 export type AcquisitionPlatform = 'android' | 'ios' | 'linux' | 'macos' | 'windows'
 
 export type RegionRestriction = 'CN' | 'EU27'
@@ -60,7 +71,7 @@ export type AppRecord = {
     name: string
     shortDescription: string
     longDescription: string
-    platforms: string[]
+    platforms: AppPlatform[]
     status: AppStatus
     version: string
     systemRequirements: string[]

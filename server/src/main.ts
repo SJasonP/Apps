@@ -3,6 +3,7 @@ import {createServer as createHttpServer} from 'node:http'
 import {createServer as createHttpsServer} from 'node:https'
 import {extname, join, normalize, relative, resolve, sep} from 'node:path'
 import {fileURLToPath} from 'node:url'
+import {createBrotliCompress, createGzip} from 'node:zlib'
 import mime from 'mime'
 import type {IncomingMessage, ServerResponse} from 'node:http'
 
@@ -18,6 +19,19 @@ const serverDir = resolve(fileURLToPath(new URL('..', import.meta.url)))
 const projectDir = resolve(serverDir, '..')
 const distDir = resolve(process.env.APP_STATIC_DIR ?? join(projectDir, 'src', 'dist'))
 const indexHtmlPath = join(distDir, 'index.html')
+const notFoundHtmlPath = join(distDir, '404.html')
+
+const contentSecurityPolicy = [
+    "default-src 'self'",
+    "img-src 'self' data:",
+    "style-src 'self' 'unsafe-inline'",
+    "connect-src 'self'",
+    "frame-ancestors 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+].join('; ')
+
+type CompressionEncoding = 'br' | 'gzip'
 
 const textMimeTypes = new Set(['application/json', 'image/svg+xml', 'text/css', 'text/html', 'text/javascript', 'text/plain'])
 const eu27CountryCodes = new Set([
@@ -66,6 +80,34 @@ function getContentType(filePath: string): string {
     }
 
     return contentType
+}
+
+function setSecurityHeaders(response: ServerResponse): void {
+    response.setHeader('X-Content-Type-Options', 'nosniff')
+    response.setHeader('Referrer-Policy', 'strict-origin-when-cross-origin')
+    response.setHeader('Content-Security-Policy', contentSecurityPolicy)
+
+    if (!USE_HTTP) {
+        response.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains')
+    }
+}
+
+function isCompressibleContentType(contentType: string): boolean {
+    return textMimeTypes.has(contentType.split(';')[0].trim())
+}
+
+function negotiateEncoding(acceptEncoding: string | string[] | undefined): CompressionEncoding | null {
+    const header = (Array.isArray(acceptEncoding) ? acceptEncoding.join(',') : acceptEncoding ?? '').toLowerCase()
+
+    if (header.includes('br')) {
+        return 'br'
+    }
+
+    if (header.includes('gzip')) {
+        return 'gzip'
+    }
+
+    return null
 }
 
 function getCanonicalPath(pathname: string): string {
@@ -243,19 +285,68 @@ function cacheControlForPath(filePath: string): string {
     return 'public, max-age=300'
 }
 
-function serveFile(response: ServerResponse, filePath: string): void {
-    const fileStat = statSync(filePath)
+function sendFile(
+    request: IncomingMessage,
+    response: ServerResponse,
+    filePath: string,
+    options: {statusCode?: number; cacheControl: string},
+): void {
+    const contentType = getContentType(filePath)
+    const isHead = request.method === 'HEAD'
+    const encoding = isCompressibleContentType(contentType)
+        ? negotiateEncoding(request.headers['accept-encoding'])
+        : null
 
-    response.writeHead(200, {
-        'Content-Type': getContentType(filePath),
-        'Content-Length': fileStat.size,
-        'Cache-Control': cacheControlForPath(filePath),
-    })
+    const headers: Record<string, string | number> = {
+        'Content-Type': contentType,
+        'Cache-Control': options.cacheControl,
+    }
 
-    createReadStream(filePath).pipe(response)
+    if (encoding) {
+        headers['Content-Encoding'] = encoding
+        headers['Vary'] = 'Accept-Encoding'
+    } else {
+        headers['Content-Length'] = statSync(filePath).size
+    }
+
+    response.writeHead(options.statusCode ?? 200, headers)
+
+    if (isHead) {
+        response.end()
+        return
+    }
+
+    const source = createReadStream(filePath)
+
+    if (encoding === 'br') {
+        source.pipe(createBrotliCompress()).pipe(response)
+    } else if (encoding === 'gzip') {
+        source.pipe(createGzip()).pipe(response)
+    } else {
+        source.pipe(response)
+    }
 }
 
-function serveIndex(response: ServerResponse): void {
+function resolvePageFile(pathname: string): string | null {
+    const canonicalPath = getCanonicalPath(pathname)
+    const relativePath = canonicalPath === '/' ? '/index.html' : `${canonicalPath}/index.html`
+
+    return resolveStaticPath(relativePath)
+}
+
+function servePage(request: IncomingMessage, response: ServerResponse, pathname: string): void {
+    const pageFile = resolvePageFile(pathname)
+
+    if (pageFile && existsSync(pageFile) && statSync(pageFile).isFile()) {
+        sendFile(request, response, pageFile, {cacheControl: 'no-store'})
+        return
+    }
+
+    if (existsSync(notFoundHtmlPath)) {
+        sendFile(request, response, notFoundHtmlPath, {statusCode: 404, cacheControl: 'no-store'})
+        return
+    }
+
     if (!existsSync(indexHtmlPath)) {
         response.writeHead(500, {
             'Content-Type': 'text/plain; charset=utf-8',
@@ -265,12 +356,7 @@ function serveIndex(response: ServerResponse): void {
         return
     }
 
-    response.writeHead(200, {
-        'Content-Type': 'text/html; charset=utf-8',
-        'Cache-Control': 'no-store',
-    })
-
-    createReadStream(indexHtmlPath).pipe(response)
+    sendFile(request, response, indexHtmlPath, {cacheControl: 'no-store'})
 }
 
 function isLikelyFileRequest(pathname: string): boolean {
@@ -278,6 +364,8 @@ function isLikelyFileRequest(pathname: string): boolean {
 }
 
 function handleRequest(request: IncomingMessage, response: ServerResponse): void {
+    setSecurityHeaders(response)
+
     if (request.method !== 'GET' && request.method !== 'HEAD') {
         response.writeHead(405, {
             Allow: 'GET, HEAD',
@@ -307,18 +395,7 @@ function handleRequest(request: IncomingMessage, response: ServerResponse): void
     }
 
     if (existsSync(staticPath) && statSync(staticPath).isFile()) {
-        if (request.method === 'HEAD') {
-            const fileStat = statSync(staticPath)
-            response.writeHead(200, {
-                'Content-Type': getContentType(staticPath),
-                'Content-Length': fileStat.size,
-                'Cache-Control': cacheControlForPath(staticPath),
-            })
-            response.end()
-            return
-        }
-
-        serveFile(response, staticPath)
+        sendFile(request, response, staticPath, {cacheControl: cacheControlForPath(staticPath)})
         return
     }
 
@@ -337,25 +414,7 @@ function handleRequest(request: IncomingMessage, response: ServerResponse): void
         return
     }
 
-    if (request.method === 'HEAD') {
-        if (!existsSync(indexHtmlPath)) {
-            response.writeHead(500, {
-                'Content-Type': 'text/plain; charset=utf-8',
-                'Cache-Control': 'no-store',
-            })
-            response.end()
-            return
-        }
-
-        response.writeHead(200, {
-            'Content-Type': 'text/html; charset=utf-8',
-            'Cache-Control': 'no-store',
-        })
-        response.end()
-        return
-    }
-
-    serveIndex(response)
+    servePage(request, response, requestUrl.pathname)
 }
 
 if (!existsSync(distDir)) {

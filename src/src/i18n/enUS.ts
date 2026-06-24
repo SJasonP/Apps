@@ -43,6 +43,8 @@ export const enUS: UiText = {
     regionLabel: 'Region',
     regionVerificationRequired: 'App Store acquisition requires IP-based region verification and is unavailable until the region is confirmed.',
     selectedForDevice: 'Selected for this device',
+    sourceDownloadNotice: 'No prebuilt asset matches this device. Builds for this platform are available from the project releases page.',
+    viewReleases: 'View Releases',
     githubReleases: 'GitHub Releases',
     siteSummary: 'Site summary',
     footerNavigation: 'Footer navigation',

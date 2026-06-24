@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react'
 import {ArticlePage, InfoPanel} from '../components'
-import type {AppRecord, DownloadLink, GithubReleaseDownloadLink, RegionRestriction} from '../content'
+import type {AcquisitionPlatform, AppRecord, DownloadLink, GithubReleaseDownloadLink, RegionRestriction} from '../content'
 import type {Locale, UiText} from '../i18n'
 import {
     getDevicePlatform,
@@ -26,7 +26,7 @@ export function GetPage({
     locale: Locale
 }) {
     const [ipRegion, setIpRegion] = useState<IpRegionResult>({countryCode: null, region: null, source: 'loading'})
-    const platform = getDevicePlatform()
+    const [platform, setPlatform] = useState<AcquisitionPlatform | 'unknown'>('unknown')
     const region = ipRegion.region
     const isAppleDevice = isApplePlatform(platform)
     const appStoreLink = app.downloadLinks.find((link) => link.kind === 'app-store')
@@ -42,6 +42,8 @@ export function GetPage({
 
     useEffect(() => {
         let active = true
+
+        setPlatform(getDevicePlatform())
 
         getIpRegion().then((result) => {
             if (active) {
@@ -79,6 +81,13 @@ export function GetPage({
                             {text.getNow}
                         </a>
                         {region === 'CN' ? <p className="download-note">{text.githubProxyNotice}</p> : null}
+                    </div>
+                ) : app.sourceUrl ? (
+                    <div className="download-choice">
+                        <p>{text.sourceDownloadNotice}</p>
+                        <a className="button primary" href={`${app.sourceUrl}/releases`} rel="noreferrer" target="_blank">
+                            {text.viewReleases}
+                        </a>
                     </div>
                 ) : (
                     <p>{text.unavailableForDevice}</p>

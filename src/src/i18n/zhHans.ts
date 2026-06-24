@@ -39,6 +39,8 @@ export const zhHans: UiText = {
     regionLabel: '地区',
     regionVerificationRequired: 'App Store 获取需要完成基于 IP 的地区确认；地区确认前暂不开放。',
     selectedForDevice: '已根据此设备选择',
+    sourceDownloadNotice: '当前没有适用于此设备的预构建文件。该平台的构建可在项目发布页获取。',
+    viewReleases: '查看发布页',
     githubReleases: 'GitHub Releases',
     siteSummary: '站点摘要',
     footerNavigation: '页脚导航',

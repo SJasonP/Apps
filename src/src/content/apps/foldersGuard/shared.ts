@@ -1,29 +1,23 @@
+import {githubReleaseAsset} from '../../releaseAsset'
 import type {AppSharedRecord} from '../../types'
+
+const version = '1.1.0'
+const sourceUrl = 'https://github.com/SJasonP/FoldersGuard'
 
 export const foldersGuardShared: AppSharedRecord = {
     slug: 'folders-guard',
     name: 'Folders Guard',
     platforms: ['macOS', 'Windows', 'Linux'],
     status: 'available',
-    version: '1.1.0',
+    version,
     icon: '/apps/folders-guard/icon-light.png',
     iconSmall: '/apps/folders-guard/icon-light-256.png',
     iconDark: '/apps/folders-guard/icon-dark.png',
     iconDarkSmall: '/apps/folders-guard/icon-dark-256.png',
-    sourceUrl: 'https://github.com/SJasonP/FoldersGuard',
+    sourceUrl,
     downloadLinks: [
-        {
-            kind: 'github-release',
-            url: 'https://github.com/SJasonP/FoldersGuard/releases/download/v1.1.0/FoldersGuard-v1.1.0-macOS.zip',
-            platform: 'macos',
-            fileName: 'FoldersGuard-v1.1.0-macOS.zip',
-        },
-        {
-            kind: 'github-release',
-            url: 'https://github.com/SJasonP/FoldersGuard/releases/download/v1.1.0/FoldersGuard-v1.1.0-Windows.zip',
-            platform: 'windows',
-            fileName: 'FoldersGuard-v1.1.0-Windows.zip',
-        },
+        githubReleaseAsset(sourceUrl, 'FoldersGuard', version, {platform: 'macos', label: 'macOS', ext: 'zip'}),
+        githubReleaseAsset(sourceUrl, 'FoldersGuard', version, {platform: 'windows', label: 'Windows', ext: 'zip'}),
     ],
     supportEmail: 'SJasonP@iCloud.com',
 }

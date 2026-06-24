@@ -27,6 +27,10 @@ export async function getIpRegion(): Promise<IpRegionResult> {
 }
 
 export function getDevicePlatform(): AcquisitionPlatform | 'unknown' {
+    if (typeof navigator === 'undefined') {
+        return 'unknown'
+    }
+
     const nav = navigator as Navigator & { userAgentData?: { platform?: string } }
     const platform = `${nav.userAgentData?.platform ?? navigator.platform}`.toLowerCase()
     const userAgent = navigator.userAgent.toLowerCase()

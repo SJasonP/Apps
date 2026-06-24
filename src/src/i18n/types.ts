@@ -43,6 +43,8 @@ export type UiText = {
     regionLabel: string
     regionVerificationRequired: string
     selectedForDevice: string
+    sourceDownloadNotice: string
+    viewReleases: string
     githubReleases: string
     siteSummary: string
     footerNavigation: string
