@@ -5,7 +5,7 @@ export const foldersGuardShared: AppSharedRecord = {
     name: 'Folders Guard',
     platforms: ['macOS', 'Windows', 'Linux'],
     status: 'available',
-    version: '1.0.0',
+    version: '1.1.0',
     icon: '/apps/folders-guard/icon-light.png',
     iconSmall: '/apps/folders-guard/icon-light-256.png',
     iconDark: '/apps/folders-guard/icon-dark.png',
@@ -14,15 +14,15 @@ export const foldersGuardShared: AppSharedRecord = {
     downloadLinks: [
         {
             kind: 'github-release',
-            url: 'https://github.com/SJasonP/FoldersGuard/releases/download/v1.0.0/FoldersGuard-v1.0.0-macOS.zip',
+            url: 'https://github.com/SJasonP/FoldersGuard/releases/download/v1.1.0/FoldersGuard-v1.1.0-macOS.zip',
             platform: 'macos',
-            fileName: 'FoldersGuard-v1.0.0-macOS.zip',
+            fileName: 'FoldersGuard-v1.1.0-macOS.zip',
         },
         {
             kind: 'github-release',
-            url: 'https://github.com/SJasonP/FoldersGuard/releases/download/v1.0.0/FoldersGuard-v1.0.0-Windows.zip',
+            url: 'https://github.com/SJasonP/FoldersGuard/releases/download/v1.1.0/FoldersGuard-v1.1.0-Windows.zip',
             platform: 'windows',
-            fileName: 'FoldersGuard-v1.0.0-Windows.zip',
+            fileName: 'FoldersGuard-v1.1.0-Windows.zip',
         },
     ],
     supportEmail: 'SJasonP@iCloud.com',

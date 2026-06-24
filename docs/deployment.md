@@ -41,6 +41,8 @@ https://apps.sjasonp.net/history-lib/support
 https://apps.sjasonp.net/history-lib/privacy
 ```
 
+Each public page route resolves to its own prerendered HTML file emitted by the build, as described in `docs/seo.md`. The server maps a canonical page route to that route's prerendered file and serves it directly. Unknown page routes serve the prerendered not-found page. The single root `index.html` is no longer reused as a shared fallback for every route.
+
 Trailing-slash public page routes should redirect to canonical no-trailing-slash routes.
 
 Public page routes whose path contains uppercase letters should permanently redirect to the all-lowercase canonical path.
@@ -132,8 +134,25 @@ For local HTTP-only verification:
 APP_SERVER_USE_HTTP=1 npm run start
 ```
 
-## Open Questions
+## Static Prerendering
 
-- Which server will serve production: nginx, Apache, Caddy, or a Node static server
-- Whether canonical redirects should be handled by the server, the app, or both
-- Whether deployment will run directly on macOS or another host
+The frontend build emits one prerendered HTML file per enumerable public route, plus the not-found page, with each page's metadata and `en-US` baseline content already in the markup. The set of routes is derived from the app content at build time, so prerendering never drifts from the apps that exist. See `docs/seo.md` for metadata and rendering rules.
+
+The build also emits `robots.txt` and `sitemap.xml` at the site root.
+
+## Security Headers
+
+The server sends these response headers on all responses:
+
+```text
+Strict-Transport-Security: max-age=31536000; includeSubDomains
+X-Content-Type-Options: nosniff
+Referrer-Policy: strict-origin-when-cross-origin
+Content-Security-Policy: default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'
+```
+
+`Strict-Transport-Security` is sent only when serving over HTTPS. The Content Security Policy must allow the get page to call `/api/region` on the same origin and must allow GitHub release and `gh-proxy.org` download links to open in a new tab as top-level navigations.
+
+## Compression
+
+The server negotiates content encoding for compressible text responses, including HTML, CSS, JavaScript, JSON, and SVG. It prefers Brotli when the client advertises `br` in `Accept-Encoding`, and otherwise uses gzip. Already-compressed binary assets such as PNG icons are served without re-compression.

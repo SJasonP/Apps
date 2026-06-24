@@ -33,6 +33,12 @@ Deferred global route:
 
 Global support exists as an app support index. Global privacy may exist later, but App Store metadata should prefer app-specific privacy URLs.
 
+## Page Metadata
+
+Every route defines its own title, meta description, canonical URL, Open Graph and Twitter Card metadata. App product pages additionally embed `SoftwareApplication` structured data. Titles, descriptions, and structured-data rules are specified in `docs/seo.md`.
+
+Routes are prerendered to static HTML so each page is fully titled and crawlable without executing JavaScript. The home and product pages are the primary indexable targets.
+
 ## Home Page
 
 The home page is an app index.

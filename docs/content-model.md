@@ -71,11 +71,22 @@ To add an App:
 
 ## Platform
 
-Suggested platform values:
+Platform values:
 
 ```ts
-type AppPlatform = 'macOS' | 'iOS' | 'iPadOS' | 'watchOS' | 'visionOS' | 'Web'
+type AppPlatform =
+  | 'macOS'
+  | 'iOS'
+  | 'iPadOS'
+  | 'watchOS'
+  | 'visionOS'
+  | 'Windows'
+  | 'Linux'
+  | 'CLI'
+  | 'Web'
 ```
+
+`AppPlatform` is the display and marketing platform list shown on product pages. It is distinct from `AcquisitionPlatform`, which keys concrete download assets. The set of `AppPlatform` values must include every platform any app actually lists, so the content type never lags behind shipped apps.
 
 ## Status
 
@@ -122,6 +133,23 @@ App Store links should include `restrictedRegions: ['CN', 'EU27']` when the app 
 GitHub release links should point to concrete release assets, not only to the release list page, so the get page can select a platform-specific download automatically.
 
 Download links do not include user-facing labels. The get page owns channel names such as `App Store` and `GitHub Releases`; release entries own only concrete distribution metadata such as `platform`, `url`, and `fileName`.
+
+## Release Asset Naming
+
+GitHub release `url` and `fileName` follow a deterministic template so a version change touches only the `version` field:
+
+```text
+fileName: {AppName}-v{version}-{PlatformLabel}.zip
+url:      {sourceUrl}/releases/download/v{version}/{fileName}
+```
+
+`{PlatformLabel}` is the release asset's platform label, such as `macOS` or `Windows`. `shared.ts` derives each release link's `url` and `fileName` from `version`, `slug`/`name`, and the platform, rather than hardcoding them per release. Bumping an app to a new release changes only `version`, which removes the risk of a stale or mismatched download URL.
+
+## Platform And Download Parity
+
+Each platform listed in `platforms` that ships a downloadable binary must have a matching `github-release` asset or `app-store` link for that `AcquisitionPlatform`. A platform that is distributed only from source, such as a `CLI` or `Linux` build offered through the project repository, must be covered by `sourceUrl`, and the get page must direct that visitor to the source or releases page instead of showing a dead unavailable message.
+
+`AppPlatform` and `AcquisitionPlatform` are reconciled per app: every shipped `AppPlatform` maps to an acquisition path, whether a store link, a release asset, or the source repository.
 
 ## Screenshot
 
@@ -189,7 +217,7 @@ Known fields:
 slug: history-lib
 name: History Lib
 status: available
-version: 1.0
+version: tracked in shared.ts
 platforms: macOS, iOS
 system requirements: macOS 26 or later, iOS 26 or later
 canonical page: /history-lib
@@ -221,8 +249,8 @@ Known fields:
 slug: folders-guard
 name: Folders Guard
 status: available
-version: 1.0.0
-platforms: macOS, Windows, Linux, CLI
+version: tracked in shared.ts
+platforms: macOS, Windows, Linux
 canonical page: /folders-guard
 support page: /folders-guard/support
 privacy page: /folders-guard/privacy
